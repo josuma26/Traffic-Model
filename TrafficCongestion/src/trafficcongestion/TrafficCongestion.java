@@ -5,6 +5,8 @@
  */
 package trafficcongestion;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author jsula
@@ -16,13 +18,26 @@ public class TrafficCongestion {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Car c = new Car(200,200,30,10);
-        c.SetAcceleration(0);
-        c.SetSpeed(1);
-        c.setDirection(0);
-        for(int i = 0;i<10;i++){
-            c.update(1);
+        Lane lane = new Lane(10,100,20,1);
+        ArrayList<Car> cars = new ArrayList<>();
+        int startX = 200;
+        int y = 200;
+        int width = 5;
+        int length = 20;
+        int separation = length + 5;
+        for(int i = 0;i<4;i++){
+            cars.add(new Car(startX + separation*i,y,length,width));
         }
+        
+        lane.addCars(cars);
+        lane.update(1, 5, 10);
+        System.out.println();
+        lane.toggleGo();
+        for(int i = 0;i<5;i++){
+            lane.update(1, 5, 10);
+            System.out.println();
+        }
+        
     }
     
 }

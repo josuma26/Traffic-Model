@@ -32,8 +32,11 @@ public class Car {
     public void Turn(int Tmp){
         this.Direction=Tmp;
         }
-    public void update(int deltaT){
+    public void update(int deltaT,int max){
         this.Speed += deltaT*this.Acceleration;
+        if (this.Speed > max){
+            this.Speed = max;
+        }
         int DeltaD= this.Speed*deltaT;
         switch(this.Direction){
             case 0:
@@ -49,7 +52,7 @@ public class Car {
                 this.x -=DeltaD;       //3=West
                 break;
         }
-        System.out.printf("Location is at: X:%d and Y:%d\n",this.x,this.y);
+        System.out.printf("Location is at: X:%d and Y:%d Speed: %d Acceleration %d\n",this.x,this.y,this.Speed,this.Acceleration);
         }
     
 }
