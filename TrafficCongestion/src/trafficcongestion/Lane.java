@@ -11,12 +11,13 @@ package trafficcongestion;
  *
  * @author alanwang
  */
+import java.awt.Point;
 import java.util.ArrayList;
 
 public class Lane {
     private int trafficflow = 0;
     private int vehicledensity = 0;
-    private int MAX_SPEED,LANE_LENGTH,LANE_WIDTH;
+    public int MAX_SPEED,LANE_LENGTH,LANE_WIDTH;
     
     private int DIRECTION;
     
@@ -24,11 +25,16 @@ public class Lane {
     
     private boolean go = false;
     
-    public Lane(int speed, int length, int width, int direction){
+    private Point point;
+    
+    private Joint out = null;
+    public Lane(int speed, int length, int width, int direction,Point p){
         MAX_SPEED = speed;
         LANE_LENGTH = length;
         LANE_WIDTH = width;
         DIRECTION = direction;
+        point = p;
+        cars = new ArrayList<>();
     }
     public int setTrafficFlow(int carNum, int time){
         trafficflow = (carNum * 3600)/time;
@@ -52,7 +58,12 @@ public class Lane {
             c.setDirection(DIRECTION);
         }
     }
+    
+    public void addCar(Car c){
+        cars.add(c);
+    }
     public void update(int timeInterval,int a,int d){
+        ArrayList<Car> toRemove = new ArrayList<>();
         if (go){
             for (Car vehicle : cars){
                 int index = cars.indexOf(vehicle);
@@ -67,7 +78,14 @@ public class Lane {
                     }
                 
                 }
+                
                 vehicle.update(timeInterval,MAX_SPEED);
+                if (vehicle.x > point.getX()){
+                    toRemove.add(vehicle);
+                    if (out != null){
+                        out.switchLane(vehicle, this);
+                    }
+                }
             }
             
         }
@@ -75,9 +93,13 @@ public class Lane {
             for(Car c:cars){
                 c.update(timeInterval,MAX_SPEED);
             }
+        }
+        cars.removeAll(toRemove);
     }
         
         
+    public void setOut(Joint out){
+        this.out = out;
     }
     
     private int distance(Car c1,Car c2){
@@ -93,6 +115,8 @@ public class Lane {
         }
         return 0;
     }
+    
+    
     public void toggleGo(){
         go = !go;
     }
