@@ -54,9 +54,6 @@ public class Lane {
     }
     public void addCars(ArrayList<Car> carList){
         cars = carList;
-        for(Car c:carList){
-            c.setDirection(DIRECTION);
-        }
     }
     
     public void addCar(Car c){
