@@ -5,8 +5,13 @@
  */
 package trafficcongestion;
 
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
+import javax.swing.JFrame;
 
 /**
  *
@@ -19,32 +24,31 @@ public class TrafficCongestion {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Lane lane = new Lane(10,100,20,1,new Point(200,100));
-        Lane lane2 = new Lane(20,100,20,1,new Point(300,100));
-        Joint j = new Joint();
-        lane.setOut(j);
-        j.addLanes(new Lane[]{lane,lane2});
-        ArrayList<Car> cars = new ArrayList<>();
-        int startX = 150;
-        int y = 110;
-        int width = 5;
-        int length = 20;
-        int separation = length + 5;
-        
-        for(int i = 0;i<4;i++){
-            cars.add(new Car(startX - separation*i,y,length,width));
-        }
-        
-        lane.addCars(cars);
-        lane.update(1, 5, 10);
-        
-        System.out.println();
-        lane.toggleGo();
-        for(int i = 0;i<7;i++){
-            lane.update(1, 5, 10);
-            System.out.println();
-        }
+        drawModel(new Intersection());
         
     }
     
+    public static void drawModel(Component model){
+        EventQueue.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                JFrame frame = new JFrame("peep this jack");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 800);
+                frame.add(model);
+                frame.setVisible(true);
+                        
+            }
+        });
+    };
+    
+}
+
+class Intersection extends Component{
+    
+    @Override
+    public void paint(Graphics g){
+        Graphics2D g2 = (Graphics2D)g;
+        TrafficGraphics.drawLane(g2);
+    }
 }
