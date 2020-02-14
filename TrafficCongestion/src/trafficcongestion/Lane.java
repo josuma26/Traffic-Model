@@ -96,8 +96,10 @@ public class Lane {
     public void toggleGo(){
         go = !go;
     }
+    public void stop(){
+        
+    }
 }
- 
 
 
 

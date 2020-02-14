@@ -25,7 +25,7 @@ public class TrafficCongestion {
         int width = 5;
         int length = 20;
         int separation = length + 5;
-        for(int i = 0;i<4;i++){
+        for(int i = 0;i < 4;i++){
             cars.add(new Car(startX + separation*i,y,length,width));
         }
         
@@ -33,7 +33,7 @@ public class TrafficCongestion {
         lane.update(1, 5, 10);
         System.out.println();
         lane.toggleGo();
-        for(int i = 0;i<5;i++){
+        for(int i = 0;i < 5;i++){
             lane.update(1, 5, 10);
             System.out.println();
         }
