@@ -19,6 +19,11 @@ public class TrafficCongestion {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        testJoint();
+        
+    }
+    
+    private static void testJoint(){
         Lane lane = new Lane(10,100,20,1,new Point(200,100));
         //Lane lane2 = new Lane(20,100,20,1,new Point(300,100));
         
