@@ -3,16 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/Users/alanwang/Desktop/traffic-model/TrafficCongestion/src/trafficcongestion/Lane.java</file>
-            <file>file:/Users/alanwang/Desktop/traffic-model/TrafficCongestion/src/trafficcongestion/TrafficCongestion.java</file>
-=======
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficCongestion/src/trafficcongestion/Lane.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficCongestion/src/trafficcongestion/Car.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficCongestion/src/trafficcongestion/Joint.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficCongestion/src/trafficcongestion/TrafficCongestion.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficCongestion/src/trafficcongestion/Node.java</file>
->>>>>>> fa8d694fd27d4bbaa4a6dbb3e2a75285b5285f10
         </group>
     </open-files>
 </project-private>
