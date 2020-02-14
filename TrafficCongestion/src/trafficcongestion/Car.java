@@ -8,10 +8,12 @@ import java.util.Scanner;
  * @author lixiaodan
  */
 public class Car {
-    int x,y,length,width,Speed,Acceleration,Direction;
+    int x,y,length,width,Speed,Acceleration;
     
     
     public Car(int x,int y,int length,int width){
+        Scanner Input = new Scanner(System.in);
+
         this.x = x;
         this.y = y;
         this.length = length;
@@ -20,38 +22,22 @@ public class Car {
         Acceleration = 0;
     }
     
-    public void setDirection(int d){
-        Direction = d;
-    }
+    
     public void SetSpeed(int Tmp){
         this.Speed=Tmp;
         }
     public void SetAcceleration(int Tmp){
         this.Acceleration=Tmp;
         }
-    public void Turn(int Tmp){
-        this.Direction=Tmp;
-        }
+    
     public void update(int deltaT,int max){
         this.Speed += deltaT*this.Acceleration;
         if (this.Speed > max){
             this.Speed = max;
         }
         int DeltaD= this.Speed*deltaT;
-        switch(this.Direction){
-            case 0:
-                this.y +=DeltaD;   //0=Up to North,2:South
-                break;
-            case 2:
-                this.y -=DeltaD;       //2=Downn to South
-                break;
-            case 1:
-                this.x +=DeltaD;       //1=East
-                break;
-            case 3:
-                this.x -=DeltaD;       //3=West
-                break;
-        }
+        this.y +=DeltaD;
+        
         System.out.printf("Location is at: X:%d and Y:%d Speed: %d Acceleration %d\n",this.x,this.y,this.Speed,this.Acceleration);
         }
     

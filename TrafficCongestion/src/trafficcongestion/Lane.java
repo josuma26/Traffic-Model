@@ -19,16 +19,16 @@ public class Lane {
     private int vehicledensity = 0;
     public int MAX_SPEED,LANE_LENGTH,LANE_WIDTH;
     
-    private int DIRECTION;
+    private double DIRECTION;
     
-    private ArrayList<Car> cars;
+    public ArrayList<Car> cars;
     
     private boolean go = false;
     
-    private Point point;
+    public Point point;
     
     private Joint out = null;
-    public Lane(int speed, int length, int width, int direction,Point p){
+    public Lane(int speed, int length, int width, double direction,Point p){
         MAX_SPEED = speed;
         LANE_LENGTH = length;
         LANE_WIDTH = width;
@@ -54,9 +54,6 @@ public class Lane {
     }
     public void addCars(ArrayList<Car> carList){
         cars = carList;
-        for(Car c:carList){
-            c.setDirection(DIRECTION);
-        }
     }
     
     public void addCar(Car c){
@@ -72,7 +69,7 @@ public class Lane {
                 }
                 else{
                     Car inFront = cars.get(index - 1);
-                    int distance = distance(vehicle,inFront);
+                    int distance = distance(inFront,vehicle);
                     if (distance >= d){
                         vehicle.SetAcceleration(a);
                     }
@@ -103,25 +100,17 @@ public class Lane {
     }
     
     private int distance(Car c1,Car c2){
-        switch(this.DIRECTION){
-            case 0:
-                return Math.abs(c1.y - c2.y - c1.width);  //0=Up to North,2:South
-            case 2:
-                return Math.abs(c2.y - c1.y - c2.width);       //2=Downn to South
-            case 1:
-                return Math.abs(c1.x - c2.x - c1.length);       //1=East
-            case 3:
-                return Math.abs(c2.x - c1.x - c2.length);     //3=West
-        }
-        return 0;
+        return c1.y - c2.y - c1.length;
     }
     
     
     public void toggleGo(){
         go = !go;
     }
+    public void stop(){
+        
+    }
 }
- 
 
 
 

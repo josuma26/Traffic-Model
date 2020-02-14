@@ -7,11 +7,10 @@ package trafficcongestion;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import java.util.Scanner;
 
 /**
  *
@@ -24,6 +23,8 @@ public class TrafficCongestion {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        //testCar(new Car(0,0,10,30));
+        //testJoint();
         drawModel(new Intersection());
         
     }
@@ -32,7 +33,7 @@ public class TrafficCongestion {
         EventQueue.invokeLater(new Runnable(){
             @Override
             public void run(){
-                JFrame frame = new JFrame("peep this jack");
+                JFrame frame = new JFrame("Traffic Simulation");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(800, 800);
                 frame.add(model);
@@ -42,13 +43,63 @@ public class TrafficCongestion {
         });
     };
     
-}
 
-class Intersection extends Component{
+
+
     
-    @Override
-    public void paint(Graphics g){
-        Graphics2D g2 = (Graphics2D)g;
-        TrafficGraphics.drawLane(g2);
+    
+    public static void testCar(Car car){
+    
+    Scanner Input = new Scanner(System.in);
+    System.out.println("Pleasen input an acceleration");
+    car.Acceleration = Input.nextInt();
+    System.out.println("Pleasen input a speed");
+    car.Speed = Input.nextInt();
+    for(int i =0;i<10;i++){
+    car.update(1, 1);
     }
+      
+    }
+    
+    private static void testJoint(){
+        Lane lane = new Lane(10,100,20,1,new Point(200,100));
+        //Lane lane2 = new Lane(20,100,20,1,new Point(300,100));
+        
+        //Joint j = new Joint();
+        //lane.setOut(j);
+        //j.addLanes(new Lane[]{lane,lane2});
+        ArrayList<Car> cars = new ArrayList<>();
+        int startX = 150;
+        int y = 110;
+        int width = 5;
+        int length = 20;
+        int separation = length + 5;
+
+        for(int i = 0;i<4;i++){
+            cars.add(new Car(startX - separation*i,y,length,width));
+        }
+        
+        lane.addCars(cars);
+        
+        testLane(lane);
+        
+        //lane.update(1, 5, 10);
+        
+        //System.out.println();
+        
+
+        /*for(int i = 0;i<7;i++){
+            lane.update(1, 5, 10);
+            System.out.println();
+        }*/
+        
+    }
+    public static void testLane(Lane lane){
+        lane.toggleGo();
+        for(int i = 0;i<7;i++){
+            lane.update(1, 5, 10);
+            System.out.println();
+        }
+    }
+
 }
