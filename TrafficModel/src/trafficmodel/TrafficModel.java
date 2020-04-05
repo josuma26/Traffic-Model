@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -52,8 +53,7 @@ public class TrafficModel {
         
         
         //runGraphics(new SimpleTraffic());
-        runGraphics(new Intersection());
-        
+        runGraphics(new Intersection(5,40,0,0));
         /*
         EventQueue.invokeLater(new Runnable() {
             @Override

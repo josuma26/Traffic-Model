@@ -76,6 +76,7 @@ public class Lane  {
     
     public void update(double a,double d){
         ArrayList<Car> toRemove= new ArrayList<>();
+        go = light.getState() == 0;
         for(Car c: cars){
             int index = cars.indexOf(c);
             if (index == firstIndex){
