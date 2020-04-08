@@ -18,46 +18,41 @@ import java.awt.Point;
  */
 public class Intersection extends CitySection{
    
-    DirectJoint joint = new DirectJoint(new Point(600,600),200,200);;
-    
-    public Intersection(double accel,double dist,int x,int y){
+    DirectJoint joint;
+    public Intersection(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth){
         super(accel,dist,x,y);
-        
-        Lane rightLane = new Lane(3*Math.PI/2,30,100,600,new Point(x + 700,y + 800));
-        Lane leftLane = new Lane(3*Math.PI/2,30,100,600,new Point(x + 600,y + 800));
-        Lane rightUpLane = new Lane(3*Math.PI/2,30,100,600,new Point(x + 700,y));
-        Lane leftUpLane = new Lane(3*Math.PI/2,30,100,600,new Point(x + 600,y));
-        Lane sidewaysLane = new Lane(0,30,100,600,new Point(x + 600,y + 600));
-        Lane sidewaysLaneUpRight = new Lane(0,30,100,600,new Point(x + 1400,y + 600));
-        Lane sidewaysLaneBottom = new Lane(0,30,100,600,new Point(x + 600,y + 700));
-        Lane sidewaysLaneBottomRight = new Lane(0,30,100,600,new Point(x + 1400,y + 700));
+        joint = new DirectJoint(new Point(x + laneLength,y + laneLength),jWidth,jWidth);
+        Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + laneLength + jWidth));
+        Lane leftLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + 2*laneLength + jWidth));
+        Lane rightUpLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y));
+        Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + laneLength));
+        Lane sidewaysLane = new Lane(Math.PI,maxSpeed,laneWidth,laneLength,new Point(x,y + laneLength + laneWidth));
+        Lane sidewaysLaneUpRight = new Lane(Math.PI,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + jWidth,y + laneLength + laneWidth));
+        Lane sidewaysLaneBottom = new Lane(0,maxSpeed,laneWidth,laneLength,new Point(x + laneLength,y + laneLength + laneWidth));
+        Lane sidewaysLaneBottomRight = new Lane(0,maxSpeed,laneWidth,laneLength,new Point(x + 2*laneLength + jWidth,y + laneLength + laneWidth));
         
         addLanes(rightLane,leftLane,rightUpLane,leftUpLane,sidewaysLane,sidewaysLaneUpRight,sidewaysLaneBottom,sidewaysLaneBottomRight);
         addJoint(joint);
-        addCars(60, 70, 10, 10, 20, new int[]{0,10},new int[]{1,10});
-        setLaneNextStep(rightLane, sidewaysLaneBottomRight);
-        setLaneNextStep(leftLane, leftUpLane);
+        
+        
         setTrafficLights(new double[]{3,0.5,3,0.5}, new int[]{4,5,6,7}, new int[]{0,1,2,3});
         
-        Lane[][] a = {{leftLane}, {leftUpLane}};
+        Lane[][] a = {{leftUpLane}, {leftLane}};
         Lane[][] b = {{rightLane},{rightUpLane,sidewaysLaneBottomRight}};
         Lane[][] c = {{sidewaysLane},{sidewaysLaneUpRight}};
         Lane[][] d = {{sidewaysLaneBottom},{sidewaysLaneBottomRight}};
         configureJoint(a,b,c,d);
         
         
-        run();
-     
         
     }
+    
+    
+    
     
     @Override
     public void paint(Graphics g){
         Graphics2D g2 = (Graphics2D)g;
-        String t = "Time: " + (seconds() - startTime);
-        g2.setFont(new Font("Arial",Font.PLAIN,30));
-        g2.drawString(t, x + 1200, y + 200);
-        g2.setStroke(new BasicStroke(5));
         super.paint(g);
     }
     

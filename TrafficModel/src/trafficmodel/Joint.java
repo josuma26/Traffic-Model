@@ -44,14 +44,11 @@ public class Joint {
     }
     
     
-   
-    
     public void enter(Car c,Lane lane){
         double[] newCoords = coordsFromLane(c,lane);
         c.point.setLocation(newCoords[0],newCoords[1]);
         c.direction = lane.direction;
         this.cars.add(c);
-        System.out.println("enter");
         
     }
     
@@ -73,6 +70,7 @@ public class Joint {
                 double newX = -(gPoint.getX() + c.point.getX() - t.gPoint.getX())*Math.sin(t.direction) + (gPoint.getY() + c.point.getY() - t.gPoint.getY())*Math.cos(t.direction);
                 c.point.setLocation(newX, t.length);
                 c.turning = Double.NaN;
+                c.steps.remove(0);
             }
         }
         cars.removeAll(toRemove);
@@ -105,8 +103,10 @@ class DirectJoint extends Joint{
         for(int i = 0;i<possibleDestinations.length;i++){
             if (c.steps.get(0).equals(possibleDestinations[i])){
                 c.setConenction(paths[i]);
+                break;
             }
         }
     }
     
 }
+

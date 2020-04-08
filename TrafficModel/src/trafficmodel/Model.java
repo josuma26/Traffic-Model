@@ -19,6 +19,7 @@ import javax.swing.Timer;
  * @author jsula
  */
 public class Model extends Component{
+    //every lane mustoverride update and paint
     protected double startTime;
     int x,y;
     
@@ -28,6 +29,7 @@ public class Model extends Component{
         Timer timer = new Timer(10,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
+                update();
                 repaint();                
             }
         });
@@ -35,6 +37,9 @@ public class Model extends Component{
         
     }
     
+    public void update(){
+        
+    }
     protected long seconds(){
         return System.nanoTime()/1000000000;
     }

@@ -52,7 +52,7 @@ public class CitySection extends Model {
         joint = j;
     }
     
-    public void addCars(double cWidth,double cLength,double startX,double startY,double separation, int[] ...params){
+    public void addCars(double cWidth,double cLength,double startX,double startY,double separation,int[]... params){
         //params contains index and number of cars for each lane
         for(int[] p:params){
             Lane toAdd = lanes.get(p[0]);
@@ -64,10 +64,35 @@ public class CitySection extends Model {
         }
     }
     
-    public void setLaneNextStep(Lane l,Lane step){
+    public void setLaneNextStep(int a,int b){
+        Lane l = lanes.get(a);
+        Lane step = lanes.get(b);
         for(Car c:l.cars){
             c.addStep(step);
         }
+    }
+    
+    public void setLaneNextStep(int a,Lane b){
+        Lane from = lanes.get(a);
+        for (Car c:from.cars){
+            c.addStep(b);
+        }
+    }
+    
+    public void joinSection(int ownIndex,CitySection other,int otherLaneIndex){
+        Lane own = lanes.get(ownIndex);
+        Lane otherLane = other.lanes.get(otherLaneIndex);
+        if (own.out != null){
+            own.length += otherLane.length;
+            other.lanes.remove(otherLane);
+            
+        }
+        else{
+            otherLane.length += own.length;
+            lanes.remove(own);
+        }
+     
+        
     }
     
     public void setTrafficLights(double[] times,int[] a,int[] b){
@@ -100,22 +125,18 @@ public class CitySection extends Model {
     }
     
     
+    public void update(){
+        controlTraffic();
+        for(Lane l:lanes){
+            l.update(standardA,standardD);
+        }
+        joint.update(30,0.1);
+    }
     
     @Override
     public void paint(Graphics g){
-        controlTraffic();
         Graphics2D g2 = (Graphics2D)g;
-        
-       
-        for (Lane l:lanes){
-            l.update(standardA,standardD);
-            //l.updateAuto(g2, standardA,0.1);
-            TrafficGraphics.drawLane(g2, l);
-        }
-        
-        joint.update(30,0.1);
-        TrafficGraphics.drawJoint(g2,joint);
-        
+        TrafficGraphics.drawSection(g2, this);
     } 
    
 }

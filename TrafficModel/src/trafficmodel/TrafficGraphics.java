@@ -5,6 +5,7 @@
  */
 package trafficmodel;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -35,6 +36,7 @@ public class TrafficGraphics {
         double angle = l.direction + Math.PI/2 ;
         r.setToRotation(angle, l.gPoint.getX(), l.gPoint.getY());
         Shape rotated = r.createTransformedShape(new Rectangle2D.Double(l.gPoint.getX(),l.gPoint.getY(),l.width,l.length));
+        g2.setStroke(new BasicStroke(5));
         g2.draw(rotated);
         
         if (l.light != null){
@@ -58,6 +60,15 @@ public class TrafficGraphics {
             r.setToRotation(angle,c.point.getX() + j.gPoint.getX(),c.point.getY() + j.gPoint.getY());
             TrafficGraphics.drawCar(g2, c,j.gPoint.getX(),j.gPoint.getY() ,r);
         }
+    }
+    
+    
+    public static void drawSection(Graphics2D g2,CitySection section){
+        for (Lane l:section.lanes){
+            TrafficGraphics.drawLane(g2, l);
+        }
+        
+        TrafficGraphics.drawJoint(g2,section.joint);
     }
     
     

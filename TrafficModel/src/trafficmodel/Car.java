@@ -54,6 +54,9 @@ public class Car extends Component{
         
         this.braking = false;
         
+        this.steps = new ArrayList<>();
+        this.connection = null;
+        
     }
     
     
