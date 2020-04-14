@@ -1,2 +1,0 @@
-trafficmodel.TrafficModel
-trafficmodel.Test

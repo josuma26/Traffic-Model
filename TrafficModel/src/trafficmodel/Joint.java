@@ -24,8 +24,10 @@ public class Joint {
     double width,length;
     ArrayList<Car> cars;
     
-    HashMap connections;
+    HashMap<Lane,Lane[]> connections;
     Connection[] paths;
+    
+    Lane[] outLanes;
     
     public Joint(Point p1,double width,double length){
         this.width = width;
@@ -34,13 +36,16 @@ public class Joint {
         this.cars = new ArrayList<Car>();
         
         this.connections = new HashMap();
-       
     }
     
    
     
     public void setConnections(Lane a,Lane[] b){
         connections.put(a, b);
+    }
+    
+    public void setOutLanes(Lane[] outLanes){
+        this.outLanes = outLanes;
     }
     
     
@@ -89,7 +94,7 @@ class DirectJoint extends Joint{
     Connection[] paths;
     public DirectJoint(Point p1,double width,double height){
         super(p1,width,height);
-        paths = new Connection[]{new Straight(),new Turn()};
+        paths = new Connection[]{new Straight(),new TurnRight(),new TurnLeft()};
     }
     
     @Override

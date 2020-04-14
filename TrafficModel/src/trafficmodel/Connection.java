@@ -24,19 +24,50 @@ class Straight extends Connection{
     }
 }
 
-class Turn extends Connection{
+class TurnRight extends Connection{
     @Override
     public double dTheta(Car c,Joint j){
         if (Double.isNaN(c.turning)){
-            c.turning =  Math.ceil(j.width - c.point.getX());
+            if (c.direction == 3*Math.PI/2){
+                c.turning =  Math.ceil(j.width - c.point.getX());
+            }
+            else if (c.direction == Math.PI/2){
+                c.turning = Math.ceil(c.point.getX());
+            }
+            else if (c.direction == 0){
+                c.turning = Math.ceil(j.width - c.point.getY());
+            }
+            else{
+                c.turning = Math.ceil(c.point.getY());
+            }
         }
+        
+        
         return c.speed / (c.turning);
         
+    } 
+}
+
+class TurnLeft extends Connection{
+    @Override
+    public double dTheta(Car c,Joint j){
+        if (Double.isNaN(c.turning)){
+            if (c.direction == 3*Math.PI/2){
+                c.turning = Math.ceil(c.point.getX());
+            }
+            else if (c.direction == Math.PI/2){
+                c.turning =  Math.ceil(j.width - c.point.getX());
+                
+            }
+            else if (c.direction == 0){
+                c.turning = Math.ceil(c.point.getY());
+                
+            }
+            else{
+                c.turning = Math.ceil(j.width - c.point.getY());
+            }
+        }
+        return -c.speed/c.turning;
     }
-
-
-            
-    
-    
 }
 

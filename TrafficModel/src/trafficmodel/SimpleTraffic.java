@@ -33,8 +33,8 @@ public class SimpleTraffic extends Component{
     
     double x = 1000;
     double y = 170;
-    double laneLength = 700;
-    double laneWidth = 50;
+    int laneLength = 700;
+    int laneWidth = 50;
     double width = 20;
     double height = 50;
     double separation = 10;

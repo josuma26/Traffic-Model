@@ -20,16 +20,18 @@ import java.util.ArrayList;
  */
 public class Lane  {
     ArrayList<Car> cars;
-    double direction, maxSpeed,length,width;
+    double direction, maxSpeed;
+    int length,width;
     boolean go = false;
     Joint out;
     int firstIndex = 0,dir = -1;
     int left = 0;
     Point2D gPoint;
     TrafficLight light;
+    String name;
    
     
-   public Lane(double direction,double maxSpeed,double width,double length,Point2D p){
+   public Lane(double direction,double maxSpeed,int width,int length,Point2D p){
        this.direction = direction;
         this.maxSpeed = maxSpeed;
         this.width = width;
@@ -39,6 +41,10 @@ public class Lane  {
         light = null;
    }
     
+   public void setName(String name){
+       this.name = name;
+   }
+   
     public void setOut(Joint out){
         this.out = out;
     }
@@ -171,7 +177,7 @@ public class Lane  {
 }
 
 class InfiniteLane extends Lane{
-    public InfiniteLane(double direction,double maxSpeed,double width,double length,Point2D p){
+    public InfiniteLane(double direction,double maxSpeed,int width,int length,Point2D p){
         super(direction,maxSpeed,width,length,p);
     }
     

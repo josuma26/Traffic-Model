@@ -31,7 +31,8 @@ public class CitySection extends Model {
     TrafficController controller;
     TrafficLight light1,light2;
     
-    
+    String name;
+    int[][] entryIndices;
     public CitySection(double a,double d,int x,int y){
         //laneParam must have direction,maxSpeed,width,length,point
         standardA = a;
@@ -40,6 +41,7 @@ public class CitySection extends Model {
         this.y = y;
         
     }
+    
     
     public void addLanes(Lane ... lanes){
         this.lanes = new ArrayList<>();
@@ -130,7 +132,7 @@ public class CitySection extends Model {
         for(Lane l:lanes){
             l.update(standardA,standardD);
         }
-        joint.update(30,0.1);
+        joint.update(20,0.1);
     }
     
     @Override
