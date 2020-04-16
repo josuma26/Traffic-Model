@@ -44,19 +44,16 @@ public class FourIntersections extends Model{
         intersection4.setConnections(intersection2.lanes.get(0),side4,intersection3.lanes.get(3),up4);
         
         
-        intersection3.addCars(carWidth, carHeight, 10, 10, 20, new int[]{0,5});
-        intersection3.setLaneNextStep(0, intersection1.lanes.get(0));
-        intersection3.setLaneNextStep(0,intersection2.lanes.get(2));
-        intersection3.setLaneNextStep(0,intersection4.lanes.get(1));
-        intersection3.setLaneNextStep(0,intersection3.lanes.get(3));
-        intersection3.setLaneNextStep(0,intersection3.lanes.get(4));
         
-        
-        intersection3.addCars(carWidth,carHeight,10,10,20,new int[]{2,5});
-        intersection3.setLaneNextStep(2, 4);
         
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
-        nav.getPath(nav.endpoints.get(0), nav.endpoints.get(3));
+        
+        //intersection1.sendCarsFromTo(nav, 1, 6, 5, carWidth, carHeight, 10, 10, 20);
+        //intersection1.sendCarsFromTo(nav,0,5,5,carWidth,carHeight,10,10,20);
+        intersection2.sendCarsFromTo(nav, 3, 1, 5 , carWidth, carHeight, 10, 10, 20);
+        //intersection2.sendCarsFromTo(nav,2,5,5,carWidth, carHeight, 10, 10, 20);
+        //intersection3.sendCarsFromTo(nav,4,3,5,carWidth,carHeight,10,10,20);
+        
         run();
     }
     

@@ -66,6 +66,13 @@ public class CitySection extends Model {
         }
     }
     
+    public void addCarsLane(double cWidth,double cLength,double startX,double startY,double separation,Lane l,int n){
+        for(int i = 0;i<n;i++){
+            Car car = new Car(startX,startY + i*(cLength + separation),cWidth,cLength);
+            l.addCar(car);
+        }
+    }
+    
     public void setLaneNextStep(int a,int b){
         Lane l = lanes.get(a);
         Lane step = lanes.get(b);
@@ -79,6 +86,23 @@ public class CitySection extends Model {
         for (Car c:from.cars){
             c.addStep(b);
         }
+    }
+    
+    public void setLanePath(Lane from,Path p){
+        for(Lane step:p.connections.subList(1, p.connections.size())){
+            for(Car c:from.cars){
+                c.addStep(step);
+            }
+        }
+    }
+    
+    
+    public void sendCarsFromTo(Navigation nav,int from,int to,int n,double cWidth,double cLength,double startX,double startY,double separation){
+        Node fromNode = nav.endpoints.get(from),toNode = nav.endpoints.get(to);
+        Path p = nav.getPath(fromNode, toNode);
+        Lane entry = fromNode.outEdges.get(0).lane;
+        addCarsLane(cWidth,cLength,startX,startY,separation,entry,n);
+        setLanePath(entry,p);
     }
     
     public void joinSection(int ownIndex,CitySection other,int otherLaneIndex){

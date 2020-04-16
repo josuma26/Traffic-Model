@@ -1,91 +1,62 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trafficmodel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import trafficmodel.Edge;
+import trafficmodel.Node;
 
-/**
- *
- * @author jsula
- */
-public class Path {
-    ArrayList<Node> nodes;
+public class Path{
     double length;
+    ArrayList<Node> steps;
+    ArrayList<Lane> connections;
+    
+    public Path(Node start){
+        steps = new ArrayList<>();
+        connections = new ArrayList<>();
+        steps.add(start);
+        length = 0;
+    }
+    
+    
+    public Path(ArrayList<Node> nodes){
+        steps = new ArrayList<>();
+        connections = new ArrayList<>();
+        length = 0;
+        steps.add(nodes.get(0));
+        for(Node n:nodes.subList(1, nodes.size())){
+            this.add(n);
+        }
+    }
     
     public Path(){
-        nodes = new ArrayList<>();
-        length = 0;
-    }
-    
-    public Path(Graph g,int[] indexes){
-        nodes = new ArrayList<>();
-        length = 0;
-        int index = indexes[0];
-        for(int i = 0;i<indexes.length;i++){
-            Node thisNode = g.nodes.get(indexes[i]);
-            for(Number[] connection:thisNode.connections){
-                if ((int)connection[0] == index){
-                    length += (double)connection[1];
-                    break;
-                }
-            }
-            nodes.add(thisNode);
-            index = indexes[i];
-        }
-    }
-    public Path(Node[] inputNodes){
-        nodes = new ArrayList<>();
-        length = 0;
-        int index = inputNodes[0].index;
-        for(Node n:inputNodes){
-            nodes.add(n);
-            for(Number[] connection:n.connections){
-                if ((int)connection[0] == index){
-                    length += (double)connection[1];
-                    break;
-                }
-            }
-            index = n.index;
-        }
-        nodes.addAll(Arrays.asList(inputNodes));
         
     }
     
-    public void addNode(Node n){
-        if (this.nodes.size() != 0){
-            int lastIndex = this.nodes.get(this.nodes.size()-1).index;
-            for(Number[] connection:n.connections){
-                if ((int)connection[0] == lastIndex){
-                    length += (double)connection[1];
-                }
-            }
-           
+    public Node beforeSelf(){
+        if (steps.size() > 1){
+            return steps.get(steps.size() - 2);
         }
         else{
-            length = 0;
+            return null;
         }
-        this.nodes.add(n);
-       
         
     }
     
-    public Path copy(){
-        Path newCopy = new Path();
-        for(Node n:this.nodes){
-            newCopy.addNode(n);
+    public void add(Node step){
+        Node last = steps.get(steps.size()-1);
+        steps.add(step);
+        for(Edge e:step.inEdges){
+            if (e.in.equals(last)){
+                length += e.lane.length;
+                connections.add(e.lane);
+            }
         }
-        return newCopy;
     }
     
-    public void print(){
-        for (Node n:this.nodes){
-            System.out.print(" " + n.name);
-        }
-        System.out.println(" " + this.length);
+    public Path clone(){
+        Path newPath = new Path();
+        newPath.steps = (ArrayList<Node>)this.steps.clone();
+        newPath.length = length;
+        newPath.connections = (ArrayList<Lane>)this.connections.clone();
+        return newPath;
     }
-    
 }
