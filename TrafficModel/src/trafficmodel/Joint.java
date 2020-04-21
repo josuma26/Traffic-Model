@@ -8,6 +8,7 @@ package trafficmodel;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -29,6 +30,10 @@ public class Joint {
     
     Lane[] outLanes;
     
+    
+    Rectangle2D[] quadrants;
+    ArrayList<ArrayList<Car>> carsInQuadrants;
+    List<Lane> orderedInLanes;
     public Joint(Point p1,double width,double length){
         this.width = width;
         this.length = length;
@@ -36,9 +41,33 @@ public class Joint {
         this.cars = new ArrayList<Car>();
         
         this.connections = new HashMap();
+        
+        this.quadrants = new Rectangle2D[4];
+        for(int i = 0;i<2;i++){
+            for(int j = 0;j<2;j++){
+                double x =  i*width/2;
+                double y =  j*length/2;
+                Rectangle2D rect = new Rectangle2D.Double(x,y,width/2,length/2);
+                this.quadrants[i + 2*j] = rect;
+            }
+        }
+        
+        
     }
     
-   
+    public int[] rotateQuadrants(int n){
+        //n is int form 0-3
+        int[] from = {0,1,2,3};
+        for (int i = 0;i<n;i++){
+            int[] copy = from.clone();
+            copy[0] = from[2];
+            copy[1] = from[0];
+            copy[2] = from[3];
+            copy[3] = from[1];
+            from = copy;
+        }
+        return from;
+    }
     
     public void setConnections(Lane a,Lane[] b){
         connections.put(a, b);
@@ -55,6 +84,24 @@ public class Joint {
         c.direction = lane.direction;
         this.cars.add(c);
         
+        
+        
+        
+    }
+    
+    private void carsInQuadrants(){
+        carsInQuadrants = new ArrayList<>();
+        for(int i = 0;i<4;i++){
+            carsInQuadrants.add(new ArrayList<>());
+        }
+        for (Car c:cars){
+            for(int i = 0;i<4;i++){
+                Rectangle2D rect = quadrants[i];
+                if (rect.contains(c.point)){
+                    carsInQuadrants.get(i).add(c);
+                }
+            }
+        }
     }
     
     protected double[] coordsFromLane(Car c,Lane lane){
@@ -63,10 +110,11 @@ public class Joint {
         return new double[]{x,y};
     }
     
-    public void update(double max,double interval){
+    public void update(double a,double max,double interval){
+        carsInQuadrants();
         ArrayList<Car> toRemove = new ArrayList<>();
         for(Car c:cars){
-            c.updateConnection(max,interval,this);
+            c.updateConnection(a,max,interval,this);
             Lane t = c.steps.get(0);
             
             if (!inJoint(c)){
@@ -79,6 +127,7 @@ public class Joint {
             }
         }
         cars.removeAll(toRemove);
+        
     }
     
     private boolean inJoint(Car c){
@@ -111,6 +160,8 @@ class DirectJoint extends Joint{
                 break;
             }
         }
+        
+        c.lookingOutForCoords =  rotateQuadrants(orderedInLanes.indexOf(lane));
     }
     
 }

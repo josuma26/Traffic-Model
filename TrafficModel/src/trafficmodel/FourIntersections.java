@@ -8,6 +8,8 @@ package trafficmodel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -46,13 +48,15 @@ public class FourIntersections extends Model{
         
         
         
+        
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
         
-        //intersection1.sendCarsFromTo(nav, 1, 6, 5, carWidth, carHeight, 10, 10, 20);
-        //intersection1.sendCarsFromTo(nav,0,5,5,carWidth,carHeight,10,10,20);
-        intersection2.sendCarsFromTo(nav, 3, 1, 5 , carWidth, carHeight, 10, 10, 20);
-        //intersection2.sendCarsFromTo(nav,2,5,5,carWidth, carHeight, 10, 10, 20);
-        //intersection3.sendCarsFromTo(nav,4,3,5,carWidth,carHeight,10,10,20);
+        intersection1.sendCarsFromTo(nav, 1, 6, 5, carWidth, carHeight, 10, 10, 20);
+        intersection1.sendCarsFromTo(nav,0,5,5,carWidth,carHeight,10,10,20);
+        intersection2.sendCarsFromTo(nav, 3, 2, 5 , carWidth, carHeight, 10, 10, 20);
+        intersection2.sendCarsFromTo(nav,2,5,3,carWidth, carHeight, 10, 10, 20);
+        intersection3.sendCarsFromTo(nav,4,3,5,carWidth,carHeight,10,10,20);
+        
         
         run();
     }

@@ -12,12 +12,18 @@ import java.awt.Point;
  * @author jsula
  */
 public class Connection {
+    int[] quadrants;
     public double dTheta(Car c,Joint j){
         return 0;
     }
+    
+    
 }
 
 class Straight extends Connection{
+    public Straight(){
+        this.quadrants = new int[]{1,3};
+    }
     @Override 
     public double dTheta(Car c,Joint j){
         return 0;
@@ -25,6 +31,11 @@ class Straight extends Connection{
 }
 
 class TurnRight extends Connection{
+    
+    public TurnRight(){
+        this.quadrants = new int[]{3};
+    }
+    
     @Override
     public double dTheta(Car c,Joint j){
         if (Double.isNaN(c.turning)){
@@ -49,6 +60,9 @@ class TurnRight extends Connection{
 }
 
 class TurnLeft extends Connection{
+    public TurnLeft(){
+        this.quadrants = new int[]{0,1,2,3};
+    }
     @Override
     public double dTheta(Car c,Joint j){
         if (Double.isNaN(c.turning)){

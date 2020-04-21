@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.Timer;
 
 /**
@@ -135,12 +136,18 @@ public class CitySection extends Model {
     
     public void configureJoint(Lane[][] ... configs){
         //configs first item is the lane, and the second is the conencted lanes (in correct format)
+        int[] order = {0,3,2,1};
+        int count = 0;
+        Lane[] list = new Lane[4];
         for (Lane[][] config:configs){
             Lane l = config[0][0];
             Lane[] lanes = config[1];
             l.setOut(joint);
             joint.setConnections(l, lanes);
+            list[order[count]] = l;
+            count += 1;
         }
+        joint.orderedInLanes = Arrays.asList(list);
     }
    
     
@@ -156,7 +163,7 @@ public class CitySection extends Model {
         for(Lane l:lanes){
             l.update(standardA,standardD);
         }
-        joint.update(20,0.1);
+        joint.update(standardA,20,0.1);
     }
     
     @Override

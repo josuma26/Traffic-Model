@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -29,6 +30,7 @@ public class Car extends Component{
     int n = -1;
     double turning = Double.NaN;
     
+    int[] lookingOutForCoords;
     public Car(double x,double y,double w,double h){
         this.point = new Point2D.Double(x,y);
         this.width = w;
@@ -41,6 +43,7 @@ public class Car extends Component{
         
         this.steps = new ArrayList<>();
         this.connection = null;
+        
     }
     
     public Car(double x,double y,double w,double h,double direction){
@@ -76,8 +79,33 @@ public class Car extends Component{
         //this.point.setLocation(this.point.getX(),this.point.getY() - interval*this.speed);
     }
     
-    public void updateConnection(double max,double interval,Joint j){
+    public void updateConnection(double a,double max,double interval,Joint j){
         this.speed += interval*this.acceleration;
+        
+        boolean stop = false;
+        double shortest = 1000;
+        for(int index:this.connection.quadrants){
+            int quadIndex = this.lookingOutForCoords[index];
+            ArrayList<Car> inIndex = j.carsInQuadrants.get(quadIndex);
+            for(Car c: inIndex){
+                double[] diff = speedDifference(c);
+                if (diff[0] < 0 || diff[1] < 0){
+                    stop = true;
+                    double d = distance(c);
+                    shortest = (d < shortest)?d:shortest;
+                }
+            }
+            
+        }
+        
+        if (stop){
+            this.acceleration = 0;
+            this.speed = 0;
+        }
+        else{
+            this.acceleration = a;
+        }
+        
         if (this.speed > max){
             this.speed = max;
             this.acceleration = 0;
@@ -91,7 +119,15 @@ public class Car extends Component{
         this.point.setLocation(this.point.getX() +interval*this.speed*Math.cos(this.direction),this.point.getY() + interval*this.speed*Math.sin(this.direction));
     }
     
+    private double[] speedDifference(Car c){
+        double dy =  c.speed*Math.sin(c.direction) - this.speed*Math.sin(this.direction);
+        double dx = c.speed*Math.cos(c.direction) - this.speed*Math.cos(this.direction);
+        return new double[]{dx,dy};
+    }
     
+    private double distance(Car c){
+        return c.point.distance(this.point);
+    }
     
     public void breakCar(double acceleration){
         this.braking = true;

@@ -67,16 +67,12 @@ public class Navigation {
             Object[] d = trackedNodes.get(node);
             Node from = (Node)d[0];
             int distance = (int)d[1];
-            System.out.printf("%d edges",node.outEdges.size());
             for(Edge e:node.outEdges){
-                System.out.printf("\n\t%s ",e.lane.name);
                 if (!e.out.equals(from) && !done.contains(e.out)){
                     if (trackedNodes.get(e.out) == null){
-                        System.out.print("untracked ");
                         trackedNodes.put(e.out,new Object[]{node,distance + e.lane.length});                 
                     }
                     else{
-                        System.out.print("tracked ");
                         int currentDistance = (int)trackedNodes.get(e.out)[1];
                         if (distance + e.lane.length < currentDistance){
                             trackedNodes.replace(e.out, new Object[]{node,distance + e.lane.length});
@@ -86,25 +82,16 @@ public class Navigation {
                     for(int i = 0;i<=size;i++){
                         if (i == orderedNodes.size()){
                             orderedNodes.add(e.out);
-                            System.out.print("longest ");
                         }
                         else if ((int)trackedNodes.get(e.out)[1] < (int)trackedNodes.get(orderedNodes.get(i))[1]){
                             orderedNodes.add(i,e.out);
-                            System.out.printf("%d ith position",i);
                             break;
                         }
                      } 
                 }
-                else{
-                    System.out.print("Ignoring");
-                }
+                
             }
             orderedNodes.remove(node);
-            System.out.println("\n");
-            for(Node n:orderedNodes){
-                System.out.print(trackedNodes.get(n)[1] +" ");
-            }
-            System.out.println("\n");
             
             done.add(node);
             count++;

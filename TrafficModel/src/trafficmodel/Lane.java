@@ -116,6 +116,8 @@ public class Lane  {
                     }
                 }  
             }
+            
+            
             if (distanceToEdge(c) < 0){
                 toRemove.add(c);
                 left += 1;
@@ -124,6 +126,7 @@ public class Lane  {
                 }
             }
             
+          
             
             c.updateNormal(maxSpeed,0.1);
             
