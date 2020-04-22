@@ -5,10 +5,15 @@
         <group>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/CitySection.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/FourIntersections.java</file>
+            <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Connection.java</file>
+            <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Path.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Navigation.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Joint.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Lane.java</file>
+            <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Edge.java</file>
             <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/IntersectionCombine.java</file>
+            <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Node.java</file>
+            <file>file:/C:/Users/jsula/OneDrive/Documents/NetBeansProjects/traffic-model/TrafficModel/src/trafficmodel/Car.java</file>
         </group>
     </open-files>
 </project-private>

@@ -54,7 +54,6 @@ public class TrafficModel {
         
         //runGraphics(new SimpleTraffic());
         //runGraphics(new RunIntersection());
-        //runGraphics(new RunIntersection());
         runGraphics(new FourIntersections(3,40,25,0,0,300,50,100,30,28));
         /*
         EventQueue.invokeLater(new Runnable() {

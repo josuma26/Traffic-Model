@@ -51,11 +51,16 @@ public class FourIntersections extends Model{
         
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
         
-        intersection1.sendCarsFromTo(nav, 1, 6, 5, carWidth, carHeight, 10, 10, 20);
-        intersection1.sendCarsFromTo(nav,0,5,5,carWidth,carHeight,10,10,20);
-        intersection2.sendCarsFromTo(nav, 3, 2, 5 , carWidth, carHeight, 10, 10, 20);
-        intersection2.sendCarsFromTo(nav,2,5,3,carWidth, carHeight, 10, 10, 20);
-        intersection3.sendCarsFromTo(nav,4,3,5,carWidth,carHeight,10,10,20);
+        int n = 10;
+        intersection1.sendCarsFromTo(nav, 1, 6, n, carWidth, carHeight, 10, 10, 20);
+        intersection1.sendCarsFromTo(nav,0,5,n,carWidth,carHeight,10,10,20);
+        intersection2.sendCarsFromTo(nav, 3, 2, n , carWidth, carHeight, 10, 10, 20);
+        intersection2.sendCarsFromTo(nav,2,5,n,carWidth, carHeight, 10, 10, 20);
+        intersection3.sendCarsFromTo(nav,4,3,n,carWidth,carHeight,10,10,20);
+        intersection3.sendCarsFromTo(nav,5,3,n,carWidth,carHeight,10,10,20);
+        intersection4.sendCarsFromTo(nav,6,5,n,carWidth,carHeight,10,10,20);
+        intersection4.sendCarsFromTo(nav,7,4,n,carWidth,carHeight,10,10,20);
+                
         
         
         run();
@@ -64,10 +69,11 @@ public class FourIntersections extends Model{
     
     @Override
     public void update(){
-        intersection1.update();
-        intersection2.update();
-        intersection3.update();
-        intersection4.update();
+        double interval = 0.05;
+        intersection1.update(interval);
+        intersection2.update(interval);
+        intersection3.update(interval);
+        intersection4.update(interval);
         
     }
     

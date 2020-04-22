@@ -90,7 +90,7 @@ public class CitySection extends Model {
     }
     
     public void setLanePath(Lane from,Path p){
-        for(Lane step:p.connections.subList(1, p.connections.size())){
+        for(Lane step:p.connections){
             for(Car c:from.cars){
                 c.addStep(step);
             }
@@ -158,12 +158,12 @@ public class CitySection extends Model {
     }
     
     
-    public void update(){
+    public void update(double interval){
         controlTraffic();
         for(Lane l:lanes){
-            l.update(standardA,standardD);
+            l.update(standardA,standardD,interval);
         }
-        joint.update(standardA,20,0.1);
+        joint.update(standardA,20,interval);
     }
     
     @Override

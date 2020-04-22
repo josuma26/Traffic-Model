@@ -30,7 +30,6 @@ public class Joint {
     
     Lane[] outLanes;
     
-    
     Rectangle2D[] quadrants;
     ArrayList<ArrayList<Car>> carsInQuadrants;
     List<Lane> orderedInLanes;
@@ -93,6 +92,7 @@ public class Joint {
         carsInQuadrants = new ArrayList<>();
         for(int i = 0;i<4;i++){
             carsInQuadrants.add(new ArrayList<>());
+            orderedInLanes.get(i).overflow = 0;
         }
         for (Car c:cars){
             for(int i = 0;i<4;i++){
@@ -100,6 +100,10 @@ public class Joint {
                 if (rect.contains(c.point)){
                     carsInQuadrants.get(i).add(c);
                 }
+                
+            }
+            if (!inJoint(c.point2) && c.speed == 0){
+                c.steps.get(c.currentStep - 1).overflow = c.height;
             }
         }
     }
@@ -115,15 +119,16 @@ public class Joint {
         ArrayList<Car> toRemove = new ArrayList<>();
         for(Car c:cars){
             c.updateConnection(a,max,interval,this);
-            Lane t = c.steps.get(0);
+            Lane t = c.steps.get(c.currentStep);
             
             if (!inJoint(c)){
                 toRemove.add(c);
                 t.addCar(c);
                 double newX = -(gPoint.getX() + c.point.getX() - t.gPoint.getX())*Math.sin(t.direction) + (gPoint.getY() + c.point.getY() - t.gPoint.getY())*Math.cos(t.direction);
                 c.point.setLocation(newX, t.length);
+                c.point2.setLocation(newX + c.width,t.length + c.height);
                 c.turning = Double.NaN;
-                c.steps.remove(0);
+                c.currentStep += 1;
             }
         }
         cars.removeAll(toRemove);
@@ -133,6 +138,12 @@ public class Joint {
     private boolean inJoint(Car c){
         boolean xIn = 0 <= c.point.getX() && c.point.getX() <= width;
         boolean yIn = 0 <= c.point.getY() && c.point.getY() <= length;
+        return xIn && yIn;
+    }
+    
+    private boolean inJoint(Point2D point){
+        boolean xIn = 0 <= point.getX() && point.getX() <= width;
+        boolean yIn = 0 <= point.getY() && point.getY() <= length;
         return xIn && yIn;
     }
     
@@ -150,12 +161,13 @@ class DirectJoint extends Joint{
     public void enter(Car c,Lane lane){
         double[] newCoords = coordsFromLane(c,lane);
         c.point.setLocation(newCoords[0],newCoords[1]);
+        c.point2.setLocation(newCoords[0] + c.width, newCoords[1] + c.height);
         c.direction = lane.direction ;
         this.cars.add(c);
         
         Lane[] possibleDestinations = (Lane[]) connections.get(lane);
         for(int i = 0;i<possibleDestinations.length;i++){
-            if (c.steps.get(0).equals(possibleDestinations[i])){
+            if (c.steps.get(c.currentStep).equals(possibleDestinations[i])){
                 c.setConenction(paths[i]);
                 break;
             }

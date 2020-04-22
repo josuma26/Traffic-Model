@@ -22,7 +22,8 @@ public class Lane  {
     ArrayList<Car> cars;
     double direction, maxSpeed;
     int length,width;
-    boolean go = false;
+    boolean go = false,full = false;
+    double overflow = 0;
     Joint out;
     int firstIndex = 0,dir = -1;
     int left = 0;
@@ -80,14 +81,20 @@ public class Lane  {
     }
       
     
-    public void update(double a,double d){
+    public void update(double a,double d,double interval){
         ArrayList<Car> toRemove= new ArrayList<>();
-        go = light.getState() == 0;
+        if (light != null){
+            go = light.getState() == 0;
+        }
         for(Car c: cars){
             int index = cars.indexOf(c);
             if (index == firstIndex){
-                if (go){
+                if (overflow != 0){
+                    System.out.println("now");
+                }
+                if (go && overflow == 0){
                     c.acceleration = a;
+                    
                 }
                 else if (c.acceleration >= 0){
                     double accel = -Math.pow(c.speed,2)/(2*(distanceToEdge(c)));
@@ -127,8 +134,15 @@ public class Lane  {
             }
             
           
-            
-            c.updateNormal(maxSpeed,0.1);
+            if (index == cars.size() - 1){
+                if(c.point.getY() + c.height > length - 10 && c.speed == 0){
+                    full = true;
+                }
+                else{
+                    full = false;
+                }
+            }
+            c.updateNormal(maxSpeed,interval);
             
         }
         cars.removeAll(toRemove);
@@ -136,7 +150,7 @@ public class Lane  {
     }
     
     private double distanceToEdge(Car c){
-        return c.point.getY();
+        return c.point.getY() - overflow;
         
         
     }
@@ -176,6 +190,11 @@ public class Lane  {
         return c1.point.distance(c2.point);
     }
     
+    public boolean inLane(Point2D point,Point2D reference){
+        boolean xIn = 0 <= point.getX() + reference.getX() && point.getX() + reference.getX() <= width;
+        boolean yIn = 0 <= point.getY() + reference.getY() && point.getY() + reference.getY() <= length;
+        return xIn && yIn;
+    }
     
 }
 

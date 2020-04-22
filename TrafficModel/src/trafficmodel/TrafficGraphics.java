@@ -21,13 +21,11 @@ public class TrafficGraphics {
     public static void drawCar(Graphics2D g2,Car c,double cX,double cY,AffineTransform rotation){
         g2.setColor(Color.GREEN);
         Shape rotated = rotation.createTransformedShape(new Rectangle2D.Double(cX + c.point.getX(), cY + c.point.getY(), c.width, c.height));
-        g2.fill(rotated);    
+        g2.fill(rotated);   
+        
     }
     
-    public static void drawCar(Graphics2D g2,Car c,double cX,double cY){
-        g2.setColor(Color.GREEN);
-        g2.fill(new Rectangle2D.Double(cX + c.point.getX(), cY + c.point.getY(), c.width, c.height));
-    }
+    
     
     
     public static void drawLane(Graphics2D g2,Lane l){

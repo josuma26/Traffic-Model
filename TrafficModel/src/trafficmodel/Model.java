@@ -26,7 +26,7 @@ public class Model extends Component{
     
     public void run(){
         startTime = seconds();
-        Timer timer = new Timer(10,new ActionListener(){
+        Timer timer = new Timer(5,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 update();

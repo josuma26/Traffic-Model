@@ -19,10 +19,11 @@ import java.util.Arrays;
  * @author jsula
  */
 public class Car extends Component{
-    Point2D point;
+    Point2D point,point2;
     double width,height,speed,acceleration,direction;
     boolean braking;
     ArrayList<Lane> steps;
+    int currentStep = 1;
     Connection connection;
     double t = 0;
     
@@ -32,7 +33,8 @@ public class Car extends Component{
     
     int[] lookingOutForCoords;
     public Car(double x,double y,double w,double h){
-        this.point = new Point2D.Double(x,y);
+        this.point = new Point2D.Double(x ,y);
+        this.point2 = new Point2D.Double(x + w,y + h);
         this.width = w;
         this.height = h;
         
@@ -46,21 +48,7 @@ public class Car extends Component{
         
     }
     
-    public Car(double x,double y,double w,double h,double direction){
-        this.point = new Point2D.Double(x,y);
-        this.width = w;
-        this.height = h;
-        this.direction = direction;
-        
-        this.speed = 0;
-        this.acceleration = 0;
-        
-        this.braking = false;
-        
-        this.steps = new ArrayList<>();
-        this.connection = null;
-        
-    }
+    
     
     
     
@@ -76,6 +64,7 @@ public class Car extends Component{
             this.braking = false;
         }
         this.point.setLocation(this.point.getX() +interval*this.speed*Math.cos(this.direction),this.point.getY() + interval*this.speed*Math.sin(this.direction));
+        this.point2.setLocation(this.point2.getX() +interval*this.speed*Math.cos(this.direction),this.point2.getY() + interval*this.speed*Math.sin(this.direction));
         //this.point.setLocation(this.point.getX(),this.point.getY() - interval*this.speed);
     }
     
@@ -87,18 +76,18 @@ public class Car extends Component{
         for(int index:this.connection.quadrants){
             int quadIndex = this.lookingOutForCoords[index];
             ArrayList<Car> inIndex = j.carsInQuadrants.get(quadIndex);
-            for(Car c: inIndex){
-                double[] diff = speedDifference(c);
-                if (diff[0] < 0 || diff[1] < 0){
+            
+            for(int i = inIndex.size() - 1;i >= 0;i--){
+                Car other = inIndex.get(i);
+                if (willCollide(other) ){
                     stop = true;
-                    double d = distance(c);
-                    shortest = (d < shortest)?d:shortest;
+                    
                 }
             }
             
+                    
         }
-        
-        if (stop){
+        if (stop || steps.get(currentStep).full){
             this.acceleration = 0;
             this.speed = 0;
         }
@@ -117,6 +106,19 @@ public class Car extends Component{
         }
         this.direction += interval*this.connection.dTheta(this,j);
         this.point.setLocation(this.point.getX() +interval*this.speed*Math.cos(this.direction),this.point.getY() + interval*this.speed*Math.sin(this.direction));
+        this.point2.setLocation(this.point2.getX() +interval*this.speed*Math.cos(this.direction),this.point2.getY() + interval*this.speed*Math.sin(this.direction));
+    }
+    
+    private boolean willCollide(Car c){
+        double x = this.point.getX(),y = this.point.getY();
+        double xSpeed = this.speed*Math.cos(this.direction),ySpeed = this.speed*Math.sin(this.direction);
+        
+        double tX = (x - c.point.getX())/(c.speed*Math.cos(c.direction) - xSpeed);
+        double tY = (y - c.point.getY())/(c.speed*Math.sin(c.direction) - ySpeed);
+        
+        //return (tX > 0 || tY > 0) && c.speed != 0;
+        double angleDifference = c.direction - this.direction;
+        return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0;
     }
     
     private double[] speedDifference(Car c){
@@ -125,9 +127,7 @@ public class Car extends Component{
         return new double[]{dx,dy};
     }
     
-    private double distance(Car c){
-        return c.point.distance(this.point);
-    }
+    
     
     public void breakCar(double acceleration){
         this.braking = true;
