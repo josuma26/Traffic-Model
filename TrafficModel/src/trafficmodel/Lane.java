@@ -86,12 +86,10 @@ public class Lane  {
         if (light != null){
             go = light.getState() == 0;
         }
+        
         for(Car c: cars){
             int index = cars.indexOf(c);
             if (index == firstIndex){
-                if (overflow != 0){
-                    System.out.println("now");
-                }
                 if (go && overflow == 0){
                     c.acceleration = a;
                     
@@ -106,6 +104,23 @@ public class Lane  {
             else{
                 Car inFront = cars.get(index + dir);
                 double dist = distance(c,inFront) - inFront.height;
+                
+                if (dist >= d){
+                    c.acceleration = a;
+                }
+                else if (c.acceleration >= 0){
+                    if (inFront.acceleration == 0){
+                        c.breakCar(-Math.pow(c.speed,2)/(2*(dist -10)));
+                    }
+                    else {
+                        double futureDistance = -Math.pow(inFront.speed,2)/(2*inFront.acceleration) ;
+                        double accel = -Math.pow(c.speed,2)/(2*(dist + futureDistance - 10));
+                        c.breakCar(accel);
+                        
+                    }
+                }
+            }
+                /*
                 if (inFront.speed > 0 && inFront.acceleration >= 0){
                     if (dist >= d){
                         c.acceleration = a;
@@ -121,8 +136,8 @@ public class Lane  {
                         c.breakCar(accel);
                         
                     }
-                }  
-            }
+                }  */
+            
             
             
             if (distanceToEdge(c) < 0){

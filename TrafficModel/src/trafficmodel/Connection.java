@@ -61,7 +61,7 @@ class TurnRight extends Connection{
 
 class TurnLeft extends Connection{
     public TurnLeft(){
-        this.quadrants = new int[]{0,1,3};
+        this.quadrants = new int[]{0,1,2,3};
     }
     @Override
     public double dTheta(Car c,Joint j){

@@ -51,7 +51,7 @@ public class FourIntersections extends Model{
         
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
         
-        int n = 10;
+        int n = 20;
         intersection1.sendCarsFromTo(nav, 1, 6, n, carWidth, carHeight, 10, 10, 20);
         intersection1.sendCarsFromTo(nav,0,5,n,carWidth,carHeight,10,10,20);
         intersection2.sendCarsFromTo(nav, 3, 2, n , carWidth, carHeight, 10, 10, 20);
@@ -74,6 +74,7 @@ public class FourIntersections extends Model{
         intersection2.update(interval);
         intersection3.update(interval);
         intersection4.update(interval);
+        
         
     }
     

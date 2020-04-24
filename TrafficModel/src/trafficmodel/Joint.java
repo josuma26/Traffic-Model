@@ -141,7 +141,7 @@ public class Joint {
         return xIn && yIn;
     }
     
-    private boolean inJoint(Point2D point){
+    public boolean inJoint(Point2D point){
         boolean xIn = 0 <= point.getX() && point.getX() <= width;
         boolean yIn = 0 <= point.getY() && point.getY() <= length;
         return xIn && yIn;
@@ -160,9 +160,11 @@ class DirectJoint extends Joint{
     @Override
     public void enter(Car c,Lane lane){
         double[] newCoords = coordsFromLane(c,lane);
-        c.point.setLocation(newCoords[0],newCoords[1]);
-        c.point2.setLocation(newCoords[0] + c.width, newCoords[1] + c.height);
         c.direction = lane.direction ;
+        c.point.setLocation(newCoords[0],newCoords[1]);
+        c.point2.setLocation(newCoords[0] -c.height*Math.cos(c.direction) - c.width*Math.sin(c.direction),
+                newCoords[1] + c.width*Math.cos(c.direction) - c.height*Math.sin(c.direction));
+        
         this.cars.add(c);
         
         Lane[] possibleDestinations = (Lane[]) connections.get(lane);

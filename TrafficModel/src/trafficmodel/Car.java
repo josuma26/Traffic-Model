@@ -118,7 +118,7 @@ public class Car extends Component{
         
         //return (tX > 0 || tY > 0) && c.speed != 0;
         double angleDifference = c.direction - this.direction;
-        return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0;
+        return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0 && !c.equals(this);
     }
     
     private double[] speedDifference(Car c){
