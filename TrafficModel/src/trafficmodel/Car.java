@@ -72,20 +72,16 @@ public class Car extends Component{
         this.speed += interval*this.acceleration;
         
         boolean stop = false;
-        double shortest = 1000;
         for(int index:this.connection.quadrants){
             int quadIndex = this.lookingOutForCoords[index];
             ArrayList<Car> inIndex = j.carsInQuadrants.get(quadIndex);
             
             for(int i = inIndex.size() - 1;i >= 0;i--){
                 Car other = inIndex.get(i);
-                if (willCollide(other) ){
+                if (willCollide(other)){
                     stop = true;
-                    
                 }
             }
-            
-                    
         }
         if (stop || steps.get(currentStep).full){
             this.acceleration = 0;
@@ -118,7 +114,8 @@ public class Car extends Component{
         
         //return (tX > 0 || tY > 0) && c.speed != 0;
         double angleDifference = c.direction - this.direction;
-        return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0 && !c.equals(this);
+        return Math.cos(angleDifference) < 0 && c.speed != 0;
+        //return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0 && !c.equals(this);
     }
     
     private double[] speedDifference(Car c){

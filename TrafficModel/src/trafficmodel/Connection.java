@@ -13,6 +13,7 @@ import java.awt.Point;
  */
 public class Connection {
     int[] quadrants;
+    boolean checkAll;
     public double dTheta(Car c,Joint j){
         return 0;
     }
@@ -33,7 +34,7 @@ class Straight extends Connection{
 class TurnRight extends Connection{
     
     public TurnRight(){
-        this.quadrants = new int[]{};
+        this.quadrants = new int[]{3};
     }
     
     @Override

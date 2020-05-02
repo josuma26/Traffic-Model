@@ -34,7 +34,7 @@ public class TrafficGraphics {
         double angle = l.direction + Math.PI/2 ;
         r.setToRotation(angle, l.gPoint.getX(), l.gPoint.getY());
         Shape rotated = r.createTransformedShape(new Rectangle2D.Double(l.gPoint.getX(),l.gPoint.getY(),l.width,l.length));
-        g2.setStroke(new BasicStroke(5));
+        g2.setStroke(new BasicStroke(3));
         g2.draw(rotated);
         
         if (l.light != null){

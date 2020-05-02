@@ -25,10 +25,9 @@ public class Navigation {
         
         for(CitySection section:sections){
             Joint joint = section.joint;
-            Node node = new Node(joint,createdNodes);
+            Node node = new Node(joint,createdNodes,section.name);
             nodes.add(node);
             createdNodes.put(joint,node);
-            
             
         }
         
@@ -68,7 +67,7 @@ public class Navigation {
             Node from = (Node)d[0];
             int distance = (int)d[1];
             for(Edge e:node.outEdges){
-                if (!e.out.equals(from) && !done.contains(e.out)){
+                if (e.out != null && !e.out.equals(from) && !done.contains(e.out)){
                     if (trackedNodes.get(e.out) == null){
                         trackedNodes.put(e.out,new Object[]{node,distance + e.lane.length});                 
                     }
@@ -93,6 +92,8 @@ public class Navigation {
             }
             orderedNodes.remove(node);
             
+            
+            
             done.add(node);
             count++;
         }
@@ -104,6 +105,7 @@ public class Navigation {
             path.add(0,from);
         }
         Path p = new Path(path);
+        
         return p;
         
     }
@@ -115,6 +117,12 @@ public class Navigation {
         for(Node n:nodes){
             n.print();
             System.out.println();
+        }
+    }
+    
+    public void printEndPoints(){
+        for(int i = 0;i<this.endpoints.size();i++){
+            System.out.printf("index: %d Entry: %s\n",i,endpoints.get(i).name);
         }
     }
 }

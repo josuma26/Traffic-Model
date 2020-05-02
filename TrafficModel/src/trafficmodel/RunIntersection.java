@@ -15,10 +15,10 @@ import java.awt.Graphics2D;
  * @author jsula
  */
 public class RunIntersection extends Model {
-    Intersection intersection;
+    FourWayIntersection intersection;
     
     public RunIntersection(){
-        intersection = new Intersection(3,40,30,0,0,600,100,200);
+        intersection = new FourWayIntersection(3,40,30,0,0,600,100,200);
         
         intersection.addCars(20, 30, 10, 10, 20, new int[]{0,5});
         intersection.setLaneNextStep(0, 5);

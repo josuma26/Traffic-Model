@@ -16,10 +16,10 @@ import java.awt.Point;
  *
  * @author jsula
  */
-public class Intersection extends CitySection{
+public class FourWayIntersection extends CitySection{
    
     DirectJoint joint;
-    public Intersection(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth){
+    public FourWayIntersection(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth){
         super(accel,dist,x,y);
         joint = new DirectJoint(new Point(x + laneLength,y + laneLength),jWidth,jWidth);
         Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + laneLength + jWidth));

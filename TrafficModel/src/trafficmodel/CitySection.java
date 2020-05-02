@@ -33,7 +33,7 @@ public class CitySection extends Model {
     TrafficLight light1,light2;
     
     String name;
-    int[][] entryIndices;
+    ArrayList<int[]> entryIndices;
     public CitySection(double a,double d,int x,int y){
         //laneParam must have direction,maxSpeed,width,length,point
         standardA = a;
@@ -138,18 +138,38 @@ public class CitySection extends Model {
         //configs first item is the lane, and the second is the conencted lanes (in correct format)
         int[] order = {0,3,2,1};
         int count = 0;
-        Lane[] list = new Lane[4];
+        ArrayList<Lane> laneList = new ArrayList<>();
         for (Lane[][] config:configs){
             Lane l = config[0][0];
             Lane[] lanes = config[1];
             l.setOut(joint);
             joint.setConnections(l, lanes);
-            list[order[count]] = l;
+            l.checkingIndex = order[count];
+            laneList.add(l);
             count += 1;
         }
-        joint.orderedInLanes = Arrays.asList(list);
+        joint.inLanes = laneList;
+        
     }
    
+    public void addLoneLane(Lane l,int lightIndex,int index,String name){
+        //first item in enry index is index of index, second is opposite lane index
+        addLanePair(l,lightIndex,name);
+        
+        this.entryIndices.add(new int[]{this.lanes.indexOf(l),index});
+        
+    }
+    
+    public void addLanePair(Lane l,int lightIndex,String name){
+        this.lanes.add(l);
+        l.setName(name);
+        if (lightIndex == 0){
+            l.setTrafficLight(light1);
+        }
+        else{
+            l.setTrafficLight(light2);
+        }
+    }
     
     public void controlTraffic(){
         controller.control();

@@ -9,15 +9,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
  * @author jsula
  */
-public class IntersectionCombine extends CitySection{
+public class FourWayIntersectionCombine extends CitySection{
     
     DirectJoint joint;
-    public IntersectionCombine(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth,Lane up,Lane side,String name,int[] ... entryIndices){
+    public FourWayIntersectionCombine(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth,String name){
         //entry indices given as pair of integers where the first number is the index of the LEAVING lane, dsecond INCOMING lane
         super(accel,dist,x,y);
         this.name = name;
@@ -26,8 +27,8 @@ public class IntersectionCombine extends CitySection{
         Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,2*laneLength,new Point(x + laneLength + laneWidth,y + laneLength));
         Lane sidewaysLaneBottom = new Lane(0,maxSpeed,laneWidth,2*laneLength,new Point(x + laneLength,y + laneLength + laneWidth));
         Lane sidewaysLaneUpRight = new Lane(Math.PI,maxSpeed,laneWidth,2*laneLength,new Point(x + laneLength + jWidth,y + laneLength + laneWidth));
-        addLanes(rightLane,leftUpLane,sidewaysLaneBottom,sidewaysLaneUpRight,up,side);
-        this.entryIndices = entryIndices;
+        addLanes(rightLane,leftUpLane,sidewaysLaneBottom,sidewaysLaneUpRight);
+        this.entryIndices = new ArrayList<>();
         
         String[] names = {"Right Lane","Left Up Lane","Sideways Lane Bottom","Sideways Lane Up Right","Up","Side"};
         for(int i = 0;i<lanes.size();i++){
@@ -36,7 +37,7 @@ public class IntersectionCombine extends CitySection{
         addJoint(joint);
         
         
-        setTrafficLights(new double[]{3,0.5,3,0.5}, new int[]{2,3,5}, new int[]{0,1,4});
+        setTrafficLights(new double[]{3,0.5,3,0.5}, new int[]{2,3}, new int[]{0,1});
         
         
         
@@ -53,9 +54,5 @@ public class IntersectionCombine extends CitySection{
         configureJoint(a,b,c,d);
     }
   
-    @Override
-    public void paint(Graphics g){
-        Graphics2D g2 = (Graphics2D)g;
-        super.paint(g);
-    }
+   
 }

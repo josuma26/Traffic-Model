@@ -24,6 +24,7 @@ public class Lane  {
     int length,width;
     boolean go = false,full = false;
     double overflow = 0;
+    int checkingIndex;
     Joint out;
     int firstIndex = 0,dir = -1;
     int left = 0;
@@ -119,24 +120,9 @@ public class Lane  {
                         
                     }
                 }
-            }
-                /*
-                if (inFront.speed > 0 && inFront.acceleration >= 0){
-                    if (dist >= d){
-                        c.acceleration = a;
-                    }
-                
-                }else if (c.acceleration >= 0  && dist < d){
-                    if (inFront.acceleration == 0){
-                        c.breakCar(-Math.pow(c.speed,2)/(2*(dist -10)));
-                    }
-                    else {
-                        double futureDistance = -Math.pow(inFront.speed,2)/(2*inFront.acceleration) ;
-                        double accel = -Math.pow(c.speed,2)/(2*(dist + futureDistance - 10));
-                        c.breakCar(accel);
                         
-                    }
-                }  */
+            }
+                
             
             
             

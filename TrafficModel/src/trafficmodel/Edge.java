@@ -17,7 +17,7 @@ public class Edge{
             this.out = n;
             n.addInEdge(this);
         }
-  
+        
     }
     
     

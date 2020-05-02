@@ -32,7 +32,7 @@ public class Joint {
     
     Rectangle2D[] quadrants;
     ArrayList<ArrayList<Car>> carsInQuadrants;
-    List<Lane> orderedInLanes;
+    List<Lane> inLanes;
     public Joint(Point p1,double width,double length){
         this.width = width;
         this.length = length;
@@ -79,9 +79,24 @@ public class Joint {
     
     public void enter(Car c,Lane lane){
         double[] newCoords = coordsFromLane(c,lane);
+        c.direction = lane.direction ;
         c.point.setLocation(newCoords[0],newCoords[1]);
-        c.direction = lane.direction;
+        c.point2.setLocation(newCoords[0] -c.height*Math.cos(c.direction) - c.width*Math.sin(c.direction),
+                newCoords[1] + c.width*Math.cos(c.direction) - c.height*Math.sin(c.direction));
+        
         this.cars.add(c);
+        
+        Lane[] possibleDestinations = (Lane[]) connections.get(lane);
+        Lane destination = c.steps.get(c.currentStep);
+        
+        for(int i = 0;i<possibleDestinations.length;i++){
+            if (c.steps.get(c.currentStep).equals(possibleDestinations[i])){
+                c.setConenction(paths[i]);
+                break;
+            }
+        }
+        
+        c.lookingOutForCoords =  rotateQuadrants(lane.checkingIndex);
         
         
         
@@ -92,8 +107,12 @@ public class Joint {
         carsInQuadrants = new ArrayList<>();
         for(int i = 0;i<4;i++){
             carsInQuadrants.add(new ArrayList<>());
-            orderedInLanes.get(i).overflow = 0;
         }
+        for(int i = 0;i<inLanes.size();i++){
+            inLanes.get(i).overflow = 0;
+        }
+        carsInQuadrants.add(new ArrayList<>());
+        
         for (Car c:cars){
             for(int i = 0;i<4;i++){
                 Rectangle2D rect = quadrants[i];
@@ -141,7 +160,7 @@ public class Joint {
         return xIn && yIn;
     }
     
-    public boolean inJoint(Point2D point){
+    private boolean inJoint(Point2D point){
         boolean xIn = 0 <= point.getX() && point.getX() <= width;
         boolean yIn = 0 <= point.getY() && point.getY() <= length;
         return xIn && yIn;
@@ -151,32 +170,16 @@ public class Joint {
 
 
 class DirectJoint extends Joint{
-    Connection[] paths;
     public DirectJoint(Point p1,double width,double height){
         super(p1,width,height);
         paths = new Connection[]{new Straight(),new TurnRight(),new TurnLeft()};
     }
-    
-    @Override
-    public void enter(Car c,Lane lane){
-        double[] newCoords = coordsFromLane(c,lane);
-        c.direction = lane.direction ;
-        c.point.setLocation(newCoords[0],newCoords[1]);
-        c.point2.setLocation(newCoords[0] -c.height*Math.cos(c.direction) - c.width*Math.sin(c.direction),
-                newCoords[1] + c.width*Math.cos(c.direction) - c.height*Math.sin(c.direction));
-        
-        this.cars.add(c);
-        
-        Lane[] possibleDestinations = (Lane[]) connections.get(lane);
-        for(int i = 0;i<possibleDestinations.length;i++){
-            if (c.steps.get(c.currentStep).equals(possibleDestinations[i])){
-                c.setConenction(paths[i]);
-                break;
-            }
-        }
-        
-        c.lookingOutForCoords =  rotateQuadrants(orderedInLanes.indexOf(lane));
+}
+
+class Junction extends Joint{
+    public Junction(Point p1,double width,double height){
+        super(p1,width,height);
+        paths = new Connection[]{new Straight(), new TurnRight()};
     }
-    
 }
 
