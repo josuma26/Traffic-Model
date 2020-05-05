@@ -155,36 +155,36 @@ public class Lane  {
         
         
     }
-    public void updateAuto(Graphics2D g2,double a,double interval){
+    public void updateAuto(double a, double k,double interval){
         ArrayList<Car> toRemove = new ArrayList<>();
         for(Car c:cars){
-            if (go){
-                //int n = cars.size() - cars.indexOf(c);
-                //int n = firstIndex  - dir*cars.indexOf(c);
-                c.acceleration = accelerationFunction(c.n,a);
-                c.speed += interval*c.acceleration;
-                c.point.setLocation(c.point.getX(), c.point.getY() - interval*c.speed);
-                
+            int index = cars.indexOf(c);
+            if (index == 0){
+                c.acceleration = a;
+            }
+            else{
+                double inFrontA = cars.get(index + dir).acceleration;
+                c.acceleration = 0.833;
+                System.out.println(distance(cars.get(index + dir),c));
             }
             
-            
-            if (distanceToEdge(c) <= 0){
-                toRemove.add(c);
-                left += 1;
-                if (out != null){
-                    out.enter(c, this);
-                }
-            }
+            c.updateNormal(maxSpeed, interval);
             
             
         }
         cars.removeAll(toRemove);
     }
     
-    
+    public int timeToCross(){
+        return (int) (length/maxSpeed + cars.size());
+    }
     
     public double accelerationFunction(int n,double a){
         return 0;
+    }
+    
+    public double aofn(double k,double a){
+        return a*(1 - a*k);
     }
     
     private double distance(Car c1,Car c2){

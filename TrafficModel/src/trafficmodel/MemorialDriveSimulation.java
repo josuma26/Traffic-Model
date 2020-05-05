@@ -89,10 +89,10 @@ public class MemorialDriveSimulation extends Model{
         
         nav.printEndPoints();
         
-        int n = 10;
+        int n = 100;
         
         riverMemorial.sendCarsFromTo(nav, 0, 4, n, carWidth, carHeight, 10, 10, 20);
-        riverMemorial.sendCarsFromTo(nav, 0, 6, n, carWidth, carHeight, 10, 10, 20);
+        riverMemorial.sendCarsFromTo(nav, 2, 6, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 3, 7, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 1, 8, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 9, 7, n, carWidth, carHeight, 10, 10, 20);
@@ -115,7 +115,6 @@ public class MemorialDriveSimulation extends Model{
         memorialHingham.update(interval);
         complete.update(interval);
         
-        System.out.println(riverMemorial.lanes.get(0).overflow);
     }
     
     @Override

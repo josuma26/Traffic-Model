@@ -30,13 +30,13 @@ public class TrafficModel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        GUI gui = new GUI();
         
         //runGraphics(new SimpleTraffic());
         //runGraphics(new RunIntersection());
         //runGraphics(new FourIntersections(3,40,25,0,0,300,50,100,28,30));
-        runGraphics(new MemorialDriveSimulation());   
-        
+        //runGraphics(new MemorialDriveSimulation());   
+        //runGraphics(new SelfDrivingTest());
                 
         
     }
@@ -52,26 +52,7 @@ public class TrafficModel {
                 f.setVisible(true);
             }
         });
-        
-        
-        
+                
     }
     
-}
-class Test extends Component{
-    public Test(){
-        
-    }
-    
-    @Override
-    public void paint(Graphics g){
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setColor(Color.yellow);
-        AffineTransform r = new AffineTransform();
-        int x = 10,y=10;
-        r.setToRotation(Math.PI/2, x + 6, y);
-        Rectangle2D rect = new Rectangle2D.Double(700,700,50,200);
-        Shape s = r.createTransformedShape(rect);
-        g2.fill(s);
-    }
 }

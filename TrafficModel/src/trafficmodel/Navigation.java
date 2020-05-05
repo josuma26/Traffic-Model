@@ -69,12 +69,12 @@ public class Navigation {
             for(Edge e:node.outEdges){
                 if (e.out != null && !e.out.equals(from) && !done.contains(e.out)){
                     if (trackedNodes.get(e.out) == null){
-                        trackedNodes.put(e.out,new Object[]{node,distance + e.lane.length});                 
+                        trackedNodes.put(e.out,new Object[]{node,distance + e.lane.timeToCross()});                 
                     }
                     else{
                         int currentDistance = (int)trackedNodes.get(e.out)[1];
-                        if (distance + e.lane.length < currentDistance){
-                            trackedNodes.replace(e.out, new Object[]{node,distance + e.lane.length});
+                        if (distance + e.lane.timeToCross() < currentDistance){
+                            trackedNodes.replace(e.out, new Object[]{node,distance + e.lane.timeToCross()});
                         }
                     }
                     int size = orderedNodes.size();

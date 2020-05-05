@@ -21,11 +21,12 @@ import java.util.Arrays;
 public class Car extends Component{
     Point2D point,point2;
     double width,height,speed,acceleration,direction;
-    boolean braking;
+    boolean braking,priority;
     ArrayList<Lane> steps;
     int currentStep = 1;
     Connection connection;
     double t = 0;
+    
     
     
     int n = -1;
@@ -42,6 +43,7 @@ public class Car extends Component{
         this.acceleration = 0;
         
         this.braking = false;
+        this.priority = false;
         
         this.steps = new ArrayList<>();
         this.connection = null;
@@ -78,11 +80,13 @@ public class Car extends Component{
             
             for(int i = inIndex.size() - 1;i >= 0;i--){
                 Car other = inIndex.get(i);
-                if (willCollide(other)){
+                if (willCollide(other) && !this.priority){
                     stop = true;
                 }
             }
         }
+        
+        this.priority = !stop;
         if (stop || steps.get(currentStep).full){
             this.acceleration = 0;
             this.speed = 0;
@@ -114,7 +118,7 @@ public class Car extends Component{
         
         //return (tX > 0 || tY > 0) && c.speed != 0;
         double angleDifference = c.direction - this.direction;
-        return Math.cos(angleDifference) < 0 && c.speed != 0;
+        return c.priority || (Math.cos(angleDifference) < 0 && c.speed != 0);
         //return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0 && !c.equals(this);
     }
     

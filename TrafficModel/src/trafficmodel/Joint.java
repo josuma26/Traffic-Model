@@ -116,7 +116,7 @@ public class Joint {
         for (Car c:cars){
             for(int i = 0;i<4;i++){
                 Rectangle2D rect = quadrants[i];
-                if (rect.contains(c.point)){
+                if (rect.contains(c.point) || rect.contains(c.point2)){
                     carsInQuadrants.get(i).add(c);
                 }
                 

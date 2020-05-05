@@ -81,6 +81,8 @@ public class FourIntersections extends Model{
         
     }
     
+    
+    
     @Override
     public void paint(Graphics g){
         intersection1.paint(g);
