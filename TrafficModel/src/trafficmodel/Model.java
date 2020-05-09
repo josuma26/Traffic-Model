@@ -29,7 +29,8 @@ public class Model extends Component{
         Timer timer = new Timer(5,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                update();
+                //update();
+                updateAuto();
                 repaint();                
             }
         });
@@ -38,6 +39,10 @@ public class Model extends Component{
     }
     
     public void update(){
+        
+    }
+    
+    public void updateAuto(){
         
     }
     protected long seconds(){

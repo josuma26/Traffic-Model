@@ -18,7 +18,7 @@ public class ThreeWayIntersection extends CitySection{
         //entry indices given as pair of integers where the first number is the index of the LEAVING lane, dsecond INCOMING lane
         super(accel,dist,x,y);
         this.name = name;
-        joint = new DirectJoint(new Point(x + laneLengths[2],y + laneLengths[1]),jWidth,jWidth);
+        joint = new DirectJoint(new Point(x + laneLengths[2],y + laneLengths[1]),jWidth,jWidth,maxSpeed);
         Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLengths[0],new Point(x + laneLengths[2] + laneWidth,y + laneLengths[1] + jWidth));
         Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLengths[1],new Point(x + laneLengths[2] + laneWidth,y + laneLengths[1]));
         Lane sidewaysLaneBottom = new Lane(0,maxSpeed,laneWidth,laneLengths[2],new Point(x + laneLengths[2],y + laneLengths[1] + laneWidth));
@@ -48,7 +48,8 @@ public class ThreeWayIntersection extends CitySection{
         Lane[][] d = {{lanes.get(3)},{sidewaysUpRight, left,upRight}};
         
         joint.setOutLanes(new Lane[]{upRight,rightBottom,sidewaysUpRight,left});
-        configureJoint(a,b,c,d);
+        int[] order = {0,2,2,3};
+        configureJoint(order,a,b,c,d);
     }
     
     

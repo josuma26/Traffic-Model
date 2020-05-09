@@ -90,14 +90,20 @@ public class MemorialDriveSimulation extends Model{
         nav.printEndPoints();
         
         int n = 100;
-        
+        /*
         riverMemorial.sendCarsFromTo(nav, 0, 4, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 2, 6, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 3, 7, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 1, 8, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 9, 7, n, carWidth, carHeight, 10, 10, 20);
         riverMemorial.sendCarsFromTo(nav, 5, 4, n, carWidth, carHeight, 10, 10, 20);
-                
+        
+        */
+        riverMemorial.scheduleCars(nav, 0, 4, n,carWidth,carHeight,10);
+        riverMemorial.scheduleCars(nav,2,6,n,carWidth,carHeight,10);
+        riverMemorial.scheduleCars(nav,3,7,n,carWidth,carHeight,10);
+        riverMemorial.scheduleCars(nav,1,8,n,carWidth,carHeight,10);
+        riverMemorial.scheduleCars(nav,9,7,n,carWidth,carHeight,10);
         run();
     }
     
@@ -116,6 +122,22 @@ public class MemorialDriveSimulation extends Model{
         complete.update(interval);
         
     }
+    
+    @Override
+    public void updateAuto(){
+        double interval = 0.05;
+        riverMemorial.updateAuto(interval);
+        riverBackstone.updateAuto(interval);
+        riverPutnam.updateAuto(interval);
+        westernMemorial.updateAuto(interval);
+        westernBackstone.updateAuto(interval);
+        westernPutnam.updateAuto(interval);
+        westernHew.updateAuto(interval);
+        callenderHew.updateAuto(interval);
+        memorialHingham.updateAuto(interval);
+        complete.updateAuto(interval);
+    }
+    
     
     @Override
     public void paint(Graphics g){

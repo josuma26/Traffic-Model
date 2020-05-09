@@ -1,6 +1,7 @@
 package trafficmodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import trafficmodel.Edge;
 import trafficmodel.Node;
 
@@ -14,6 +15,13 @@ public class Path{
         connections = new ArrayList<>();
         steps.add(start);
         length = 0;
+    }
+    
+    public Path(Lane[] connections){
+        this.connections = new ArrayList<>();
+        for(Lane l:connections){
+            this.connections.add(l);
+        }
     }
     
     

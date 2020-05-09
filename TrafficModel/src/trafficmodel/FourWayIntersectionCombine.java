@@ -22,7 +22,7 @@ public class FourWayIntersectionCombine extends CitySection{
         //entry indices given as pair of integers where the first number is the index of the LEAVING lane, dsecond INCOMING lane
         super(accel,dist,x,y);
         this.name = name;
-        joint = new DirectJoint(new Point(x + laneLength,y + laneLength),jWidth,jWidth);
+        joint = new DirectJoint(new Point(x + laneLength,y + laneLength),jWidth,jWidth,maxSpeed);
         Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,2*laneLength,new Point(x + laneLength + laneWidth,y + laneLength + jWidth));
         Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,2*laneLength,new Point(x + laneLength + laneWidth,y + laneLength));
         Lane sidewaysLaneBottom = new Lane(0,maxSpeed,laneWidth,2*laneLength,new Point(x + laneLength,y + laneLength + laneWidth));
@@ -51,7 +51,8 @@ public class FourWayIntersectionCombine extends CitySection{
         Lane[][] d = {{lanes.get(3)},{sideways, upRight,left}};
         
         joint.setOutLanes(new Lane[]{upRight,rightBottom,sideways,left});
-        configureJoint(a,b,c,d);
+        int[] order = {0,2,3,1};
+        configureJoint(order,a,b,c,d);
     }
   
    

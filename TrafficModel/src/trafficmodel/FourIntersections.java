@@ -55,6 +55,8 @@ public class FourIntersections extends Model{
         
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
         int n = 20;
+        
+        /*
         intersection1.sendCarsFromTo(nav, 1, 6, n, carWidth, carHeight, 10, 10, 20);
         intersection1.sendCarsFromTo(nav,0,5,n,carWidth,carHeight,10,10,20);
         intersection2.sendCarsFromTo(nav, 3, 2, n , carWidth, carHeight, 10, 10, 20);
@@ -63,8 +65,12 @@ public class FourIntersections extends Model{
         intersection3.sendCarsFromTo(nav,5,3,n,carWidth,carHeight,10,10,20);
         intersection4.sendCarsFromTo(nav,6,5,n,carWidth,carHeight,10,10,20);
         intersection4.sendCarsFromTo(nav,7,4,n,carWidth,carHeight,10,10,20);
-              
+          */
         
+        intersection1.scheduleCars(nav, 1, 6, n, carWidth, carHeight, 10);
+        intersection1.scheduleCars(nav, 0, 5, n, carWidth, carHeight, 10);
+        intersection1.scheduleCars(nav, 3, 2, n, carWidth, carHeight, 10);
+        intersection1.scheduleCars(nav, 2, 5, n, carWidth, carHeight, 10);
         
         run();
     }
@@ -76,12 +82,17 @@ public class FourIntersections extends Model{
         intersection1.update(interval);
         intersection2.update(interval);
         intersection3.update(interval);
-        intersection4.update(interval);
-        
-        
+        intersection4.update(interval);        
     }
     
-    
+    @Override
+    public void updateAuto(){
+        double interval = 0.05;
+        intersection1.updateAuto(interval);
+        intersection2.updateAuto(interval);
+        intersection3.updateAuto(interval);
+        intersection4.updateAuto(interval);        
+    }
     
     @Override
     public void paint(Graphics g){

@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.Timer;
 
 /**
@@ -34,12 +36,19 @@ public class CitySection extends Model {
     
     String name;
     ArrayList<int[]> entryIndices;
+    
+    HashMap<Lane,Object[] > fromPath;
+    
+    double carWidth,carHeight ,separationX,separation;
+    
     public CitySection(double a,double d,int x,int y){
         //laneParam must have direction,maxSpeed,width,length,point
         standardA = a;
         standardD = d;
         this.x = x;
         this.y = y;
+        
+        this.fromPath = new HashMap<>();
         
     }
     
@@ -106,6 +115,17 @@ public class CitySection extends Model {
         setLanePath(entry,p);
     }
     
+    public void scheduleCars(Navigation nav, int from, int to, int n,double carWidth,double carHeight,double separationX){
+        Node fromNode = nav.endpoints.get(from),toNode = nav.endpoints.get(to);
+        Path p = nav.getPath(fromNode, toNode);
+        Object[] pathCount = {p,n};
+        fromPath.put(fromNode.outEdges.get(0).lane, pathCount);
+        this.carWidth = carWidth;
+        this.carHeight = carHeight;
+        this.separationX = separationX;
+        this.separation = 2*(carWidth + carHeight);
+    }
+    
     public void joinSection(int ownIndex,CitySection other,int otherLaneIndex){
         Lane own = lanes.get(ownIndex);
         Lane otherLane = other.lanes.get(otherLaneIndex);
@@ -134,9 +154,8 @@ public class CitySection extends Model {
         }
     }
     
-    public void configureJoint(Lane[][] ... configs){
+    public void configureJoint(int[] order,Lane[][] ... configs){
         //configs first item is the lane, and the second is the conencted lanes (in correct format)
-        int[] order = {0,3,2,1};
         int count = 0;
         ArrayList<Lane> laneList = new ArrayList<>();
         for (Lane[][] config:configs){
@@ -183,7 +202,26 @@ public class CitySection extends Model {
         for(Lane l:lanes){
             l.update(standardA,standardD,interval);
         }
-        joint.update(standardA,20,interval);
+        joint.update(standardA,interval);
+    }
+    
+    public void updateAuto(double interval){
+        controlTraffic();
+        for(Map.Entry<Lane,Object[]> entry:fromPath.entrySet()){
+            Lane lane = entry.getKey();
+            Object[] data = entry.getValue();
+            if ((lane.distanceToEnd >= separation || lane.cars.size() == 0) && (Integer)data[1] > 0){
+                Car c = new Car(separationX,lane.length,carWidth,carHeight);
+                c.speed = lane.maxSpeed;
+                lane.addCar(c);
+                setLanePath(lane,(Path)data[0]);
+                data[1] = (Integer)data[1] - 1;
+            }
+        }
+        for(Lane l:lanes){
+            l.updateAuto(standardA,interval);
+        }
+        joint.updateAuto(standardA,interval,2*carHeight + carWidth);
     }
     
     @Override

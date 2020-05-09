@@ -22,8 +22,8 @@ public class Lane  {
     ArrayList<Car> cars;
     double direction, maxSpeed;
     int length,width;
-    boolean go = false,full = false;
-    double overflow = 0;
+    boolean go = false,full = false,decelerating = false;
+    double overflow = 0,distanceToEnd;
     int checkingIndex;
     Joint out;
     int firstIndex = 0,dir = -1;
@@ -31,7 +31,8 @@ public class Lane  {
     Point2D gPoint;
     TrafficLight light;
     String name;
-   
+    
+    double targetSpeed;
     
    public Lane(double direction,double maxSpeed,int width,int length,Point2D p){
        this.direction = direction;
@@ -41,6 +42,7 @@ public class Lane  {
         this.gPoint = p;
         this.cars = new ArrayList<>();
         light = null;
+        this.targetSpeed = maxSpeed;
    }
     
    public void setName(String name){
@@ -93,7 +95,6 @@ public class Lane  {
             if (index == firstIndex){
                 if (go && overflow == 0){
                     c.acceleration = a;
-                    
                 }
                 else if (c.acceleration >= 0){
                     double accel = -Math.pow(c.speed,2)/(2*(distanceToEdge(c)));
@@ -109,6 +110,7 @@ public class Lane  {
                 if (dist >= d){
                     c.acceleration = a;
                 }
+                
                 else if (c.acceleration >= 0){
                     if (inFront.acceleration == 0){
                         c.breakCar(-Math.pow(c.speed,2)/(2*(dist -10)));
@@ -123,9 +125,6 @@ public class Lane  {
                         
             }
                 
-            
-            
-            
             if (distanceToEdge(c) < 0){
                 toRemove.add(c);
                 left += 1;
@@ -134,8 +133,8 @@ public class Lane  {
                 }
             }
             
-          
             if (index == cars.size() - 1){
+                distanceToEnd = length - c.point2.getY();
                 if(c.point.getY() + c.height > length - 10 && c.speed == 0){
                     full = true;
                 }
@@ -152,28 +151,51 @@ public class Lane  {
     
     private double distanceToEdge(Car c){
         return c.point.getY() - overflow;
-        
-        
     }
-    public void updateAuto(double a, double k,double interval){
+    
+    public void updateAuto(double a,double interval){
         ArrayList<Car> toRemove = new ArrayList<>();
-        for(Car c:cars){
-            int index = cars.indexOf(c);
-            if (index == 0){
+        for(int index = 0;index < cars.size();index++){
+            Car c = cars.get(index);
+            
+            
+            if (c.speed > targetSpeed){
+                c.acceleration = -a;
+            }
+            else if (c.speed < targetSpeed){
                 c.acceleration = a;
+                targetSpeed = maxSpeed;
+
             }
             else{
-                double inFrontA = cars.get(index + dir).acceleration;
-                c.acceleration = 0.833;
-                System.out.println(distance(cars.get(index + dir),c));
-            }
+                c.acceleration = a;
+                targetSpeed = maxSpeed;
+                //decelerating = false;
+            }   
             
             c.updateNormal(maxSpeed, interval);
             
+            if (distanceToEdge(c) < 0){
+                toRemove.add(c);
+                left += 1;
+                if (out != null){
+                    out.enter(c,this);
+                }
+            }
             
+            if (index == cars.size() - 1){
+                distanceToEnd = length - c.point2.getY();
+                if(c.point.getY() + c.height > length - 10 && c.speed == 0){
+                    full = true;
+                }
+                else{
+                    full = false;
+                }
+            }
         }
         cars.removeAll(toRemove);
     }
+    
     
     public int timeToCross(){
         return (int) (length/maxSpeed + cars.size());

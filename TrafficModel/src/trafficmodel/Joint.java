@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class Joint {
     Point gPoint;
-    double width,length;
+    double width,length,maxSpeed;
     ArrayList<Car> cars;
     
     HashMap<Lane,Lane[]> connections;
@@ -33,9 +33,10 @@ public class Joint {
     Rectangle2D[] quadrants;
     ArrayList<ArrayList<Car>> carsInQuadrants;
     List<Lane> inLanes;
-    public Joint(Point p1,double width,double length){
+    public Joint(Point p1,double width,double length,double maxSpeed){
         this.width = width;
         this.length = length;
+        this.maxSpeed = maxSpeed;
         this.gPoint = p1;
         this.cars = new ArrayList<Car>();
         
@@ -87,8 +88,6 @@ public class Joint {
         this.cars.add(c);
         
         Lane[] possibleDestinations = (Lane[]) connections.get(lane);
-        Lane destination = c.steps.get(c.currentStep);
-        
         for(int i = 0;i<possibleDestinations.length;i++){
             if (c.steps.get(c.currentStep).equals(possibleDestinations[i])){
                 c.setConenction(paths[i]);
@@ -111,7 +110,6 @@ public class Joint {
         for(int i = 0;i<inLanes.size();i++){
             inLanes.get(i).overflow = 0;
         }
-        carsInQuadrants.add(new ArrayList<>());
         
         for (Car c:cars){
             for(int i = 0;i<4;i++){
@@ -133,11 +131,11 @@ public class Joint {
         return new double[]{x,y};
     }
     
-    public void update(double a,double max,double interval){
+    public void update(double a,double interval){
         carsInQuadrants();
         ArrayList<Car> toRemove = new ArrayList<>();
         for(Car c:cars){
-            c.updateConnection(a,max,interval,this);
+            c.updateConnection(a,maxSpeed,interval,this);
             Lane t = c.steps.get(c.currentStep);
             
             if (!inJoint(c)){
@@ -152,6 +150,75 @@ public class Joint {
         }
         cars.removeAll(toRemove);
         
+    }
+    
+    public void updateAuto(double a,double interval,double targetSeparation){
+        ArrayList<Car> toRemove = new ArrayList<>();
+        for(int i = 0;i<inLanes.size()-1;i++){
+            Lane lane = inLanes.get(i);
+            if (lane.cars.size() != 0){
+                for(int j = i+1;j<inLanes.size();j++){
+                    Lane l2 = inLanes.get(j);
+                    if (l2.cars.size() != 0 && (!lane.decelerating && !l2.decelerating)){
+                       double dist = lane.gPoint.distance(l2.gPoint);
+                       double cos = calculateAngleBetweenLanes(dist,lane,l2);
+                       Car c1 = lane.cars.get(0),c2 = l2.cars.get(0);
+                       double x = dist*cos + c2.point.getY() + c1.point.getX()+ c1.width;
+                       double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() + c2.point.getX() + c2.width;
+                       double target = c1.height + c1.width;
+                       if (x >= y){
+                           double t = x / c2.speed;
+                           double deltaY = c1.speed * t;
+                           double yPrime =  target - (deltaY - y)%targetSeparation ;
+                           double targetSpeed = l2.maxSpeed - a*slowDownTo(l2.maxSpeed,a,y,yPrime);
+                           //System.out.println(targetSpeed);
+                           l2.targetSpeed = targetSpeed;
+                           l2.decelerating = true;
+                       }
+                       else if (x < y){
+                           double t = y / c1.speed;
+                           double deltaX = c2.speed * t;
+                           double xPrime =  target - (deltaX - x)%targetSeparation;
+                           double targetSpeed = lane.maxSpeed - a*slowDownTo(lane.maxSpeed,a,x,xPrime);
+                           System.out.println(targetSpeed);
+                           lane.targetSpeed = targetSpeed;
+                           lane.decelerating = true;
+                       }
+                    }
+                    
+                }
+            }
+        }
+        
+        for(Car c:cars){
+            c.updateConnectionAuto(a,maxSpeed,interval,this);
+            if (!inJoint(c)){
+                Lane t = c.steps.get(c.currentStep);
+                toRemove.add(c);
+                t.addCar(c);
+                double newX = -(gPoint.getX() + c.point.getX() - t.gPoint.getX())*Math.sin(t.direction) + (gPoint.getY() + c.point.getY() - t.gPoint.getY())*Math.cos(t.direction);
+                c.point.setLocation(newX, t.length);
+                c.point2.setLocation(newX + c.width,t.length + c.height);
+                c.turning = Double.NaN;
+                c.currentStep += 1;
+            }
+        }
+        cars.removeAll(toRemove);
+    }
+    
+    private double calculateAngleBetweenLanes(double dist,Lane l1,Lane l2){
+        double l1x = l1.gPoint.getX(),l1y = l1.gPoint.getY(),l2x =  l2.gPoint.getX() ,l2y = l2.gPoint.getY() ;
+        double sinL1 = Math.sin(l1.direction),cosL1 = Math.cos(l1.direction);
+        double cosTheta = (sinL1*(l2x - l1x)+ cosL1*(l2y - l1y))/dist;
+        
+        return cosTheta;
+    }
+    private double slowDownTo(double max,double accel,double d,double deltaD){
+        double a = accel;
+        double b = (2*accel*d)/max;
+        double c = -(accel/2)*Math.pow(d/max, 2) + deltaD;
+        
+        return (-b + Math.sqrt(Math.pow(b,2) - 4*a*c))/(2*a);
     }
     
     private boolean inJoint(Car c){
@@ -170,15 +237,15 @@ public class Joint {
 
 
 class DirectJoint extends Joint{
-    public DirectJoint(Point p1,double width,double height){
-        super(p1,width,height);
+    public DirectJoint(Point p1,double width,double height,double maxSpeed){
+        super(p1,width,height,maxSpeed);
         paths = new Connection[]{new Straight(),new TurnRight(),new TurnLeft()};
     }
 }
 
 class Junction extends Joint{
-    public Junction(Point p1,double width,double height){
-        super(p1,width,height);
+    public Junction(Point p1,double width,double height,double maxSpeed){
+        super(p1,width,height,maxSpeed);
         paths = new Connection[]{new Straight(), new TurnRight()};
     }
 }

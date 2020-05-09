@@ -49,10 +49,7 @@ public class Car extends Component{
         this.connection = null;
         
     }
-    
-    
-    
-    
+   
     
     public void updateNormal(double max,double interval){
         this.speed += interval*this.acceleration;
@@ -70,6 +67,22 @@ public class Car extends Component{
         //this.point.setLocation(this.point.getX(),this.point.getY() - interval*this.speed);
     }
     
+    public void updateConnectionAuto(double a,double max, double interval, Joint j){
+        this.speed += interval*this.acceleration;
+        if (this.speed > max){
+            this.speed = max;
+            this.acceleration = 0;
+        }
+        if (this.braking && this.speed <= 0){
+            this.speed = 0;
+            this.acceleration = 0;
+            this.braking = false;
+        }
+        this.direction += interval*this.connection.dTheta(this,j);
+        this.point.setLocation(this.point.getX() +interval*this.speed*Math.cos(this.direction),this.point.getY() + interval*this.speed*Math.sin(this.direction));
+        this.point2.setLocation(this.point2.getX() +interval*this.speed*Math.cos(this.direction),this.point2.getY() + interval*this.speed*Math.sin(this.direction));
+    }
+    
     public void updateConnection(double a,double max,double interval,Joint j){
         this.speed += interval*this.acceleration;
         
@@ -80,7 +93,7 @@ public class Car extends Component{
             
             for(int i = inIndex.size() - 1;i >= 0;i--){
                 Car other = inIndex.get(i);
-                if (willCollide(other) && !this.priority){
+                if (willCollide(other) && other.priority){
                     stop = true;
                 }
             }
@@ -118,16 +131,9 @@ public class Car extends Component{
         
         //return (tX > 0 || tY > 0) && c.speed != 0;
         double angleDifference = c.direction - this.direction;
-        return c.priority || (Math.cos(angleDifference) < 0 && c.speed != 0);
+        return (Math.cos(angleDifference) < 0 && c.speed != 0);
         //return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0 && !c.equals(this);
     }
-    
-    private double[] speedDifference(Car c){
-        double dy =  c.speed*Math.sin(c.direction) - this.speed*Math.sin(this.direction);
-        double dx = c.speed*Math.cos(c.direction) - this.speed*Math.cos(this.direction);
-        return new double[]{dx,dy};
-    }
-    
     
     
     public void breakCar(double acceleration){

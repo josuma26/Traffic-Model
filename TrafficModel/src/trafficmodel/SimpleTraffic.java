@@ -91,7 +91,7 @@ public class SimpleTraffic extends Component{
         TrafficGraphics.drawLane(g2, selfDriving);
         g2.setColor(Color.BLACK);
         g2.drawString("Self-Driving cars:",350,250);
-        selfDriving.updateAuto(a,d,0.05);
+       // selfDriving.updateAuto(a,d,0.05);
       
     }
 }

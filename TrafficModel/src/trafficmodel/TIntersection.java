@@ -18,7 +18,7 @@ public class TIntersection extends CitySection {
     public TIntersection(double accel,double dist,double maxSpeed,int x,int y,int[] laneLengths,int laneWidth,int jWidth,String name,int[] ... entryIndices){
         super(accel,dist,x,y);
         this.name = name;
-        joint = new Junction(new Point(x + laneLengths[1],y),jWidth,jWidth);
+        joint = new Junction(new Point(x + laneLengths[1],y),jWidth,jWidth,maxSpeed);
         Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLengths[0],new Point(x + laneLengths[1] + laneWidth,y + jWidth));
         Lane sidewaysLaneBottom = new Lane(0,maxSpeed,laneWidth,laneLengths[1],new Point(x + laneLengths[1],y));
         Lane sidewaysLane = new Lane(0,maxSpeed,laneWidth,laneLengths[2],new Point(x + laneLengths[2],y + laneWidth));
@@ -45,7 +45,8 @@ public class TIntersection extends CitySection {
         Lane[][] c = {{lanes.get(2)},{sidewaysUpRight,null}};
         
         joint.setOutLanes(new Lane[]{rightBottom,sidewaysUpRight,left});
-        configureJoint(a,b,c);
+        int[] order = {0,3,3};
+        configureJoint(order,a,b,c);
     }
     
 }

@@ -18,7 +18,7 @@ public class TwoWayTIntersection extends CitySection{
     public TwoWayTIntersection(double accel,double dist,double maxSpeed,int x,int y,int[] laneLengths,int laneWidth,int jWidth,String name){
         super(accel,dist,x,y);
         this.name = name;
-        joint = new DirectJoint(new Point(x,y + laneLengths[1]),jWidth,jWidth);
+        joint = new DirectJoint(new Point(x,y + laneLengths[1]),jWidth,jWidth,maxSpeed);
         Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLengths[0],new Point(x  + laneWidth,y + laneLengths[1] + jWidth));
         Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLengths[1],new Point(x  + laneWidth,y + laneLengths[1]));
         addLanes(rightLane,leftUpLane);
@@ -40,7 +40,8 @@ public class TwoWayTIntersection extends CitySection{
         Lane[][] b = {{lanes.get(1)},{left,null,rightBottom}};
         
         joint.setOutLanes(new Lane[]{rightBottom,sidewaysUpRight,rightUp,left});
-        configureJoint(a,b);
+        int[] order = {0,2};
+        configureJoint(order,a,b);
     }
     
 }
