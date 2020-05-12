@@ -33,9 +33,9 @@ public class RunIntersection extends Model {
     
     @Override
     public void initialize(){
-        int n = 10;
+        int n = 5;
         if (selfDriving){
-            Path p = new Path(new Lane[]{intersection.lanes.get(0),intersection.lanes.get(5)});
+            Path p = new Path(new Lane[]{intersection.lanes.get(0),intersection.lanes.get(6)});
             intersection.fromPath.put(intersection.lanes.get(0),new Object[]{p,n});
 
             Path p2 = new Path(new Lane[]{intersection.lanes.get(2),intersection.lanes.get(5)});
@@ -77,6 +77,11 @@ public class RunIntersection extends Model {
     @Override
     public void updateAuto(){
         intersection.updateAuto(0.05);
+        Lane l = intersection.lanes.get(2);
+        if (l.cars.size() > 0){
+            Car c = l.cars.get(0);
+            //System.out.printf("A: %.1f S: %.1f T: %.1f\n",c.acceleration,c.speed,l.targetSpeed);
+        }
         
         
         

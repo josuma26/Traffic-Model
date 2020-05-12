@@ -24,10 +24,10 @@ public class Model extends Component{
     int x,y;
     protected boolean selfDriving = true;
     
-    
+    int rate = 5;
     public void run(){
         startTime = seconds();
-        Timer timer = new Timer(5,new ActionListener(){
+        Timer timer = new Timer(this.rate,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 if (selfDriving){
@@ -57,6 +57,10 @@ public class Model extends Component{
     
     public void setMode(boolean autonomous){
         this.selfDriving = autonomous;
+    }
+    
+    public void setRefreshRate(int rate){
+        this.rate = rate;
     }
     
     protected long seconds(){

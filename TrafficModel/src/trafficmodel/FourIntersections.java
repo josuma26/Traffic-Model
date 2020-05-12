@@ -53,7 +53,8 @@ public class FourIntersections extends Model{
                 
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
         
-               
+        selfDriving = true;
+        initialize();
         run();
     }
     
@@ -61,12 +62,12 @@ public class FourIntersections extends Model{
     public void initialize(){
         int n = 50;
         if (selfDriving){
-            //intersection1.scheduleCars(nav, 0, 4, n, carWidth, carHeight, 10);
+            intersection1.scheduleCars(nav, 0, 4, n, carWidth, carHeight, 10);
             intersection2.scheduleCars(nav, 1, 3, n, carWidth, carHeight, 10);
             intersection3.scheduleCars(nav, 4, 0, n, carWidth, carHeight, 10);
             intersection4.scheduleCars(nav, 3, 1, n, carWidth, carHeight, 10);
 
-            //intersection1.scheduleCars(nav, 2, 6, n, carWidth, carHeight, 10);
+            intersection1.scheduleCars(nav, 2, 6, n, carWidth, carHeight, 10);
             intersection1.scheduleCars(nav, 5, 7, n, carWidth, carHeight, 10);
             intersection3.scheduleCars(nav, 6, 2, n, carWidth, carHeight, 10);
             intersection4.scheduleCars(nav, 7, 5, n, carWidth, carHeight, 10);

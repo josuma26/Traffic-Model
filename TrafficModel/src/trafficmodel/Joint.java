@@ -155,7 +155,7 @@ public class Joint {
     
     public void updateAuto(double a,double interval,double targetSeparation){
         ArrayList<Car> toRemove = new ArrayList<>();
-        inLanes = sortInLanes();
+        //inLanes = sortInLanes();
         for(int i = 0;i<inLanes.size()-1;i++){
             Lane lane = inLanes.get(i);
             if (lane.cars.size() != 0){
@@ -167,7 +167,7 @@ public class Joint {
                         Car c1 = lane.cars.get(0),c2 = l2.cars.get(0);
                         double target = c1.height + c1.width;
                         if (Math.abs(cos) > 0.001){
-                            double x = dist*cos + c2.point.getY() + c1.point.getX()+ c1.width; //horizontal distance from l1
+                            double x = dist*cos + c2.point.getY() + c1.point.getX(); //horizontal distance from l1
                             double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() + c2.point.getX() + c2.width; //vertical distance from l1
                             double t,deltaY = 0,yPrime = 0;
                            
@@ -179,15 +179,14 @@ public class Joint {
                                 t = y / lane.maxSpeed;
                                 deltaY = l2.maxSpeed * t - x;
                             }
-                            yPrime = target - deltaY%targetSeparation;
-                            
-                            
+                            yPrime = target- deltaY%targetSeparation;
                             if (yPrime < 0){
-                                yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
-                                System.out.println("shift");
+                                //yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
                             }
+                            System.out.println(yPrime);
+                            
                             double targetSpeed = l2.maxSpeed*0.9;//l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
-                            l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(c2.point.getY() -yPrime);
+                            //l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(c2.point.getY() -yPrime);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                         }
@@ -197,7 +196,7 @@ public class Joint {
                             double deltaY = l2.maxSpeed*t;
                             double yPrime = target + (deltaY - y2)*targetSeparation;
                             double targetSpeed = l2.maxSpeed*0.9;
-                            l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(y2 - yPrime);
+                          l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(y2 - yPrime);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                             
