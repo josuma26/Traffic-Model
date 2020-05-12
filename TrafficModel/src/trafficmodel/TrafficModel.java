@@ -34,7 +34,7 @@ public class TrafficModel {
         
         //runGraphics(new SimpleTraffic());
         //runGraphics(new RunIntersection());
-        //runGraphics(new FourIntersections(3,40,30,0,0,300,50,100,28,30));
+        //runGraphics(new FourIntersections(3,40,50,0,0,300,50,100,28,30));
         //runGraphics(new MemorialDriveSimulation());   
         //runGraphics(new SelfDrivingTest());
                 

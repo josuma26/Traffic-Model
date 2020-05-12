@@ -7,6 +7,8 @@ package trafficmodel;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -67,6 +69,16 @@ public class TrafficGraphics {
         }
         
         TrafficGraphics.drawJoint(g2,section.joint);
+    }
+    
+    public static void drawTimer(Graphics g,double time,double startTime){
+        Graphics2D g2 = (Graphics2D)g;
+        String t = "Time: " + (time - startTime);
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("Arial",Font.PLAIN,30));
+        g2.setStroke(new BasicStroke(5));
+        g2.drawString(t,1200, 200);
+        
     }
     
     

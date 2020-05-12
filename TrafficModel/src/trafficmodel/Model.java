@@ -67,5 +67,9 @@ public class Model extends Component{
         return System.nanoTime()/1000000000;
     }
     
+    protected void drawTimer(Graphics g){
+        TrafficGraphics.drawTimer(g, seconds(), startTime);
+    }
+    
     
 }

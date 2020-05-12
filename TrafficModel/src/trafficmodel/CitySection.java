@@ -220,7 +220,7 @@ public class CitySection extends Model {
            
         }
         for(Lane l:lanes){
-            l.updateAuto(interval);
+            l.updateAuto(standardA,interval);
         }
         joint.updateAuto(standardA,interval,this.separation);
     }

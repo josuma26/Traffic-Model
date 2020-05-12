@@ -168,7 +168,7 @@ public class Joint {
                         double target = c1.height + c1.width;
                         if (Math.abs(cos) > 0.001){
                             double x = dist*cos + c2.point.getY() + c1.point.getX(); //horizontal distance from l1
-                            double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() + c2.point.getX() + c2.width; //vertical distance from l1
+                            double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() - c2.point.getX() - c2.width; //vertical distance from l1
                             double t,deltaY = 0,yPrime = 0;
                            
                             if (x >= y){
@@ -181,12 +181,10 @@ public class Joint {
                             }
                             yPrime = target- deltaY%targetSeparation;
                             if (yPrime < 0){
-                                //yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
+                                yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
                             }
-                            System.out.println(yPrime);
-                            
-                            double targetSpeed = l2.maxSpeed*0.9;//l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
-                            //l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(c2.point.getY() -yPrime);
+
+                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                         }
@@ -195,8 +193,7 @@ public class Joint {
                             double y2 = c2.point.getY();
                             double deltaY = l2.maxSpeed*t;
                             double yPrime = target + (deltaY - y2)*targetSeparation;
-                            double targetSpeed = l2.maxSpeed*0.9;
-                          l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(y2 - yPrime);
+                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                             
@@ -249,9 +246,9 @@ public class Joint {
         return cosTheta;
     }
     private double deltaV(double max,double accel,double d,double deltaD){
-        double a = accel;
-        double b = (2*accel*d)/max;
-        double c = -(accel/2)*Math.pow(d/max, 2) + deltaD;
+        double a = -accel;
+        double b = -accel*((deltaD/max) + 1);
+        double c = (1/2)*accel*Math.pow(deltaD/max,2) + deltaD - d;
         
         //return -Math.sqrt(Math.pow(max,2) - accel*(d - deltaD));
         return -accel*(-b + Math.sqrt(Math.pow(b,2) - 4*a*c))/(2*a);

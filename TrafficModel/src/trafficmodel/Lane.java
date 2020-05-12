@@ -155,21 +155,21 @@ public class Lane  {
         return c.point.getY() - overflow;
     }
     
-    public void updateAuto(double interval){
+    public void updateAuto(double a,double interval){
         ArrayList<Car> toRemove = new ArrayList<>();
         for(int index = 0;index < cars.size();index++){
             Car c = cars.get(index);
             if (index == 0){
                 if (c.speed > targetSpeed){
-                    c.acceleration = -this.acceleration;
+                    c.acceleration = -a;
                 }
                 else if (c.speed < targetSpeed){
-                    c.acceleration = this.acceleration;
+                    c.acceleration = a;
                     targetSpeed = maxSpeed;
 
                 }
                 else{
-                    c.acceleration = this.acceleration;
+                    c.acceleration = a;
                     targetSpeed = maxSpeed;
                 } 
                 
