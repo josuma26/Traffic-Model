@@ -146,7 +146,7 @@ public class MemorialDriveSimulation extends Model{
     
     @Override
     public void paint(Graphics g){
-        //drawTimer(g);
+        drawTimer(g);
         riverMemorial.paint(g);
         riverBackstone.paint(g);
         riverPutnam.paint(g);

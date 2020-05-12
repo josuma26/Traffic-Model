@@ -99,16 +99,12 @@ public class FourIntersections extends Model{
         intersection2.updateAuto(interval);
         intersection3.updateAuto(interval);
         intersection4.updateAuto(interval); 
-        Lane l = intersection3.lanes.get(1);
-        if (l.cars.size() > 0){
-            Car c = l.cars.get(0);
-            System.out.printf("A: %.1f S: %.1f T: %.1f\n",c.acceleration,c.speed,l.targetSpeed);
-        }
+        
     }
     
     @Override
     public void paint(Graphics g){
-        //drawTimer(g);
+        drawTimer(g);
         intersection1.paint(g);
         intersection2.paint(g);
         intersection3.paint(g);

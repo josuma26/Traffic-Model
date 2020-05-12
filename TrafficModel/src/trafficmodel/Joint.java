@@ -181,6 +181,7 @@ public class Joint {
                             }
                             yPrime = target- deltaY%targetSeparation;
                             if (yPrime < 0){
+                                System.out.println(yPrime);
                                 yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
                             }
 

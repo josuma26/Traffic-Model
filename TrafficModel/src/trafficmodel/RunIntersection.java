@@ -62,7 +62,7 @@ public class RunIntersection extends Model {
     @Override
     public void paint(Graphics g){
         intersection.paint(g);
-        //drawTimer(g);
+        drawTimer(g);
     }
     
     @Override
