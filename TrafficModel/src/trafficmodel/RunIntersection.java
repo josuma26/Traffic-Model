@@ -6,6 +6,7 @@
 package trafficmodel;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -26,16 +27,15 @@ public class RunIntersection extends Model {
         intersection.separation = 2*(32) + 30;
         intersection.separationX = 10;
              
-        selfDriving = true;
-        initialize();
+        
         run();
     }
     
     @Override
     public void initialize(){
-        int n = 10;
+        int n = 20;
         if (selfDriving){
-            Path p = new Path(new Lane[]{intersection.lanes.get(0),intersection.lanes.get(5)});
+            Path p = new Path(new Lane[]{intersection.lanes.get(0),intersection.lanes.get(6)});
             intersection.fromPath.put(intersection.lanes.get(0),new Object[]{p,n});
 
             Path p2 = new Path(new Lane[]{intersection.lanes.get(2),intersection.lanes.get(5)});
@@ -61,12 +61,8 @@ public class RunIntersection extends Model {
     }
     @Override
     public void paint(Graphics g){
-        Graphics2D g2 = (Graphics2D)g;
         intersection.paint(g);
-        String t = "Time: " + (seconds() - startTime);
-        g2.setFont(new Font("Arial",Font.PLAIN,30));
-        g2.drawString(t, x + 1200, y + 200);
-        g2.setStroke(new BasicStroke(5));
+        //drawTimer(g);
     }
     
     @Override
@@ -77,6 +73,11 @@ public class RunIntersection extends Model {
     @Override
     public void updateAuto(){
         intersection.updateAuto(0.05);
+        Lane l = intersection.lanes.get(2);
+        if (l.cars.size() > 0){
+            Car c = l.cars.get(0);
+            //System.out.printf("A: %.1f S: %.1f T: %.1f\n",c.acceleration,c.speed,l.targetSpeed);
+        }
         
         
         

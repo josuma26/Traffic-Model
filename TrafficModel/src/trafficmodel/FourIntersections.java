@@ -53,7 +53,7 @@ public class FourIntersections extends Model{
                 
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
         
-               
+        
         run();
     }
     
@@ -61,12 +61,12 @@ public class FourIntersections extends Model{
     public void initialize(){
         int n = 50;
         if (selfDriving){
-            //intersection1.scheduleCars(nav, 0, 4, n, carWidth, carHeight, 10);
+            intersection1.scheduleCars(nav, 0, 4, n, carWidth, carHeight, 10);
             intersection2.scheduleCars(nav, 1, 3, n, carWidth, carHeight, 10);
             intersection3.scheduleCars(nav, 4, 0, n, carWidth, carHeight, 10);
             intersection4.scheduleCars(nav, 3, 1, n, carWidth, carHeight, 10);
 
-            //intersection1.scheduleCars(nav, 2, 6, n, carWidth, carHeight, 10);
+            intersection1.scheduleCars(nav, 2, 6, n, carWidth, carHeight, 10);
             intersection1.scheduleCars(nav, 5, 7, n, carWidth, carHeight, 10);
             intersection3.scheduleCars(nav, 6, 2, n, carWidth, carHeight, 10);
             intersection4.scheduleCars(nav, 7, 5, n, carWidth, carHeight, 10);
@@ -98,11 +98,17 @@ public class FourIntersections extends Model{
         intersection1.updateAuto(interval);
         intersection2.updateAuto(interval);
         intersection3.updateAuto(interval);
-        intersection4.updateAuto(interval);   
+        intersection4.updateAuto(interval); 
+        Lane l = intersection3.lanes.get(1);
+        if (l.cars.size() > 0){
+            Car c = l.cars.get(0);
+            System.out.printf("A: %.1f S: %.1f T: %.1f\n",c.acceleration,c.speed,l.targetSpeed);
+        }
     }
     
     @Override
     public void paint(Graphics g){
+        //drawTimer(g);
         intersection1.paint(g);
         intersection2.paint(g);
         intersection3.paint(g);

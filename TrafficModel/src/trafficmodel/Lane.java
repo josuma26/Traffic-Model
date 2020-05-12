@@ -155,30 +155,33 @@ public class Lane  {
         return c.point.getY() - overflow;
     }
     
-    public void updateAuto(double interval){
+    public void updateAuto(double a,double interval){
         ArrayList<Car> toRemove = new ArrayList<>();
         for(int index = 0;index < cars.size();index++){
             Car c = cars.get(index);
-            
             if (index == 0){
                 if (c.speed > targetSpeed){
-                    c.acceleration = -this.acceleration;
+                    c.acceleration = -a;
                 }
                 else if (c.speed < targetSpeed){
-                    c.acceleration = this.acceleration;
+                    c.acceleration = a;
                     targetSpeed = maxSpeed;
 
                 }
                 else{
-                    c.acceleration = this.acceleration;
+                    c.acceleration = a;
                     targetSpeed = maxSpeed;
                 } 
+                
             }
             else{
                 Car inFront = cars.get(index - 1);
-                double d = distance(c,inFront) - 2*c.height - c.width;
-                c.acceleration =  2*(d + c.speed - inFront.speed) - inFront.acceleration;
+                double d = distance(c,inFront) - c.height - 2*c.height - c.width;
+                double t = (inFront.point.getY())/(2*inFront.speed);
+                c.acceleration = 2*(d + (1/2)*inFront.acceleration*Math.pow(t,2) + (inFront.speed - c.speed)*t)/(Math.pow(t,2));
+                
             }
+                        
             
             
             c.updateNormal(maxSpeed, interval);
@@ -186,9 +189,7 @@ public class Lane  {
             if (distanceToEdge(c) < 0){
                 toRemove.add(c);
                 left += 1;
-                if (out != null){
-                    out.enter(c,this);
-                }
+                
             }
             
             if (index == cars.size() - 1){
@@ -200,6 +201,11 @@ public class Lane  {
                     full = false;
                 }
             }
+        }
+        for(Car c:toRemove){
+            if (out != null){
+                out.enter(c,this);
+             }
         }
         cars.removeAll(toRemove);
     }

@@ -87,13 +87,8 @@ public class MemorialDriveSimulation extends Model{
         nav = new Navigation(riverMemorial,riverBackstone,riverPutnam,westernMemorial,westernBackstone,westernPutnam,westernHew,callenderHew,memorialHingham,complete);
         //nav.print();
         
-        nav.printEndPoints();
         
-        int n = 100;
-        
-        
-        
-        
+                
         
         run();
     }
@@ -151,6 +146,7 @@ public class MemorialDriveSimulation extends Model{
     
     @Override
     public void paint(Graphics g){
+        //drawTimer(g);
         riverMemorial.paint(g);
         riverBackstone.paint(g);
         riverPutnam.paint(g);

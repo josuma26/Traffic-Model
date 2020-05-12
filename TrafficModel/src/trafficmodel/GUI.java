@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+<<<<<<< HEAD
+=======
+import java.awt.FlowLayout;
+>>>>>>> 6ba0112f01577caa7b3d60bef43abab07522e959
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,7 +23,10 @@ import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6ba0112f01577caa7b3d60bef43abab07522e959
 
 /**
  *
@@ -32,7 +39,7 @@ public class GUI {
       JFrame frame = new JFrame("car simulation");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       show(frame);
-      frame.setSize(1500,800);
+      frame.setSize(1000,800);
       frame.pack();
       frame.setLocationRelativeTo(null);
       frame.setVisible(true);
@@ -61,7 +68,11 @@ public class GUI {
         JComboBox<String> comboBox = new JComboBox<>(numbers);
         comboBox.setSelectedIndex(3);
         comboBox.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
+<<<<<<< HEAD
         //  comboBox.setPreferredSize(new Dimension(250,80));
+=======
+      //  comboBox.setPreferredSize(new Dimension(250,80));
+>>>>>>> 6ba0112f01577caa7b3d60bef43abab07522e959
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JComboBox combo = (JComboBox)e.getSource();
@@ -71,7 +82,7 @@ public class GUI {
         });
          panel1.add(comboBox);
          JPanel panel3 = new JPanel();
-         JCheckBox checkBox1 = new JCheckBox("Self driving");  
+         JCheckBox checkBox1 = new JCheckBox("Self driving ");  
          checkBox1.setBounds(100,100, 50,50);
          JCheckBox checkBox2 = new JCheckBox("Intelligent path finding");  
          checkBox2.setBounds(100,150, 50,50);  
@@ -91,12 +102,16 @@ public class GUI {
          JSlider speed = new JSlider(JSlider.HORIZONTAL,
              0, 100, 50);
          speed.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
+<<<<<<< HEAD
          speed.addChangeListener(new ChangeListener(){
              public void stateChanged(ChangeEvent e) {
                  System.out.println("Speed of the car");
              }
          });
              
+=======
+         
+>>>>>>> 6ba0112f01577caa7b3d60bef43abab07522e959
          speed.setMajorTickSpacing(20);
          speed.setMinorTickSpacing(10);
          speed.setPaintTicks(true);
@@ -104,16 +119,21 @@ public class GUI {
          panel5.add(sliderLabel);
          panel5.add(speed);
          container.add(panel5);
+<<<<<<< HEAD
         
+=======
+         
+>>>>>>> 6ba0112f01577caa7b3d60bef43abab07522e959
          
          JPanel panel4 = new JPanel();
          Button start = new Button("Start Simulation");
-         start.setMaximumSize(new Dimension(500,300));
+         start.setFont(myFont);
+         start.setPreferredSize(new Dimension(220,50));
          start.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Model m = null;
                 if (simulation == 0){
-                    m = new FourIntersections(3,40,40,0,0,300,50,100,28,30);
+                    m = new FourIntersections(3,40,25,0,0,300,50,100,28,30);
                 }
                 else if (simulation == 1){
                     m = new MemorialDriveSimulation();
@@ -121,9 +141,10 @@ public class GUI {
                 else if(simulation == 2){
                     m = new RunIntersection();
                 }
-                
                 m.selfDriving = checkBox1.isSelected();
+                m.setRefreshRate(speed.getValue());
                 m.initialize();
+                
                 runGraphics(m);
             }
          });
