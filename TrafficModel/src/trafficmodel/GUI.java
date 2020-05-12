@@ -61,6 +61,7 @@ public class GUI {
         JComboBox<String> comboBox = new JComboBox<>(numbers);
         comboBox.setSelectedIndex(3);
         comboBox.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
+        //  comboBox.setPreferredSize(new Dimension(250,80));
       //  comboBox.setPreferredSize(new Dimension(250,80));
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +92,7 @@ public class GUI {
          JSlider speed = new JSlider(JSlider.HORIZONTAL,
              0, 100, 50);
          speed.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
-         
+
          speed.setMajorTickSpacing(20);
          speed.setMinorTickSpacing(10);
          speed.setPaintTicks(true);
@@ -99,7 +100,7 @@ public class GUI {
          panel5.add(sliderLabel);
          panel5.add(speed);
          container.add(panel5);
-         
+
          
          JPanel panel4 = new JPanel();
          Button start = new Button("Start Simulation");
