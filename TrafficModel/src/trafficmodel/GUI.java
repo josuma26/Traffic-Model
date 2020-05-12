@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +15,11 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JSplitPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 
 /**
  *
@@ -38,7 +42,7 @@ public class GUI {
      
      private void show(JFrame frame){
         JPanel container = new JPanel();
-       
+        Font myFont = new Font("Times New Roman", Font.PLAIN,20);
         JPanel panel2 = new JPanel();
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 panel2, container);
@@ -50,11 +54,14 @@ public class GUI {
        
         JPanel panel1 = new JPanel();
         JLabel label1 = new JLabel("Choose a simulation time: ");
+        label1.setFont(myFont);
         panel1.add(label1);
         String[] numbers = {"11:00-12:00", "12:00-13:00", "13:00-14:00",
           "14:00-15:00", "15:00-16:00","17:00-18:00"};
         JComboBox<String> comboBox = new JComboBox<>(numbers);
         comboBox.setSelectedIndex(3);
+        comboBox.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
+        //  comboBox.setPreferredSize(new Dimension(250,80));
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JComboBox combo = (JComboBox)e.getSource();
@@ -68,12 +75,36 @@ public class GUI {
          checkBox1.setBounds(100,100, 50,50);
          JCheckBox checkBox2 = new JCheckBox("Intelligent path finding");  
          checkBox2.setBounds(100,150, 50,50);  
+         checkBox1.setFont(myFont);
+         checkBox2.setFont(myFont);
          
          panel3.add(checkBox1);
          panel3.add(checkBox2);
          
          container.add(panel1);
          container.add(panel3);
+         
+         JPanel panel5 = new JPanel();
+         JLabel sliderLabel = new JLabel("Car Speed");
+         sliderLabel.setFont(myFont);
+         
+         JSlider speed = new JSlider(JSlider.HORIZONTAL,
+             0, 100, 50);
+         speed.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
+         speed.addChangeListener(new ChangeListener(){
+             public void stateChanged(ChangeEvent e) {
+                 System.out.println("Speed of the car");
+             }
+         });
+             
+         speed.setMajorTickSpacing(20);
+         speed.setMinorTickSpacing(10);
+         speed.setPaintTicks(true);
+         speed.setPaintLabels(true);
+         panel5.add(sliderLabel);
+         panel5.add(speed);
+         container.add(panel5);
+        
          
          JPanel panel4 = new JPanel();
          Button start = new Button("Start Simulation");
