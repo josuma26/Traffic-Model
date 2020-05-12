@@ -24,6 +24,7 @@ public class Lane  {
     int length,width;
     boolean go = false,full = false,decelerating = false;
     double overflow = 0,distanceToEnd;
+    double acceleration;
     int checkingIndex;
     Joint out;
     int firstIndex = 0,dir = -1;
@@ -43,6 +44,7 @@ public class Lane  {
         this.cars = new ArrayList<>();
         light = null;
         this.targetSpeed = maxSpeed;
+        this.acceleration= 0;
    }
     
    public void setName(String name){
@@ -135,7 +137,7 @@ public class Lane  {
             
             if (index == cars.size() - 1){
                 distanceToEnd = length - c.point2.getY();
-                if(c.point.getY() + c.height > length - 10 && c.speed == 0){
+                if(c.point.getY() + c.height > length - 20 && c.speed == 0){
                     full = true;
                 }
                 else{
@@ -153,25 +155,31 @@ public class Lane  {
         return c.point.getY() - overflow;
     }
     
-    public void updateAuto(double a,double interval){
+    public void updateAuto(double interval){
         ArrayList<Car> toRemove = new ArrayList<>();
         for(int index = 0;index < cars.size();index++){
             Car c = cars.get(index);
             
-            
-            if (c.speed > targetSpeed){
-                c.acceleration = -a;
-            }
-            else if (c.speed < targetSpeed){
-                c.acceleration = a;
-                targetSpeed = maxSpeed;
+            if (index == 0){
+                if (c.speed > targetSpeed){
+                    c.acceleration = -this.acceleration;
+                }
+                else if (c.speed < targetSpeed){
+                    c.acceleration = this.acceleration;
+                    targetSpeed = maxSpeed;
 
+                }
+                else{
+                    c.acceleration = this.acceleration;
+                    targetSpeed = maxSpeed;
+                } 
             }
             else{
-                c.acceleration = a;
-                targetSpeed = maxSpeed;
-                //decelerating = false;
-            }   
+                Car inFront = cars.get(index - 1);
+                double d = distance(c,inFront) - 2*c.height - c.width;
+                c.acceleration =  2*(d + c.speed - inFront.speed) - inFront.acceleration;
+            }
+            
             
             c.updateNormal(maxSpeed, interval);
             

@@ -85,8 +85,9 @@ public class Joint {
         c.point2.setLocation(newCoords[0] -c.height*Math.cos(c.direction) - c.width*Math.sin(c.direction),
                 newCoords[1] + c.width*Math.cos(c.direction) - c.height*Math.sin(c.direction));
         
-        this.cars.add(c);
         
+        this.cars.add(c);
+
         Lane[] possibleDestinations = (Lane[]) connections.get(lane);
         for(int i = 0;i<possibleDestinations.length;i++){
             if (c.steps.get(c.currentStep).equals(possibleDestinations[i])){
@@ -154,39 +155,56 @@ public class Joint {
     
     public void updateAuto(double a,double interval,double targetSeparation){
         ArrayList<Car> toRemove = new ArrayList<>();
+        inLanes = sortInLanes();
         for(int i = 0;i<inLanes.size()-1;i++){
             Lane lane = inLanes.get(i);
             if (lane.cars.size() != 0){
                 for(int j = i+1;j<inLanes.size();j++){
                     Lane l2 = inLanes.get(j);
-                    if (l2.cars.size() != 0 && (!lane.decelerating && !l2.decelerating)){
-                       double dist = lane.gPoint.distance(l2.gPoint);
-                       double cos = calculateAngleBetweenLanes(dist,lane,l2);
-                       Car c1 = lane.cars.get(0),c2 = l2.cars.get(0);
-                       double x = dist*cos + c2.point.getY() + c1.point.getX()+ c1.width;
-                       double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() + c2.point.getX() + c2.width;
-                       double target = c1.height + c1.width;
-                       if (x >= y){
-                           double t = x / c2.speed;
-                           double deltaY = c1.speed * t;
-                           double yPrime =  target - (deltaY - y)%targetSeparation ;
-                           double targetSpeed = l2.maxSpeed - a*slowDownTo(l2.maxSpeed,a,y,yPrime);
-                           //System.out.println(targetSpeed);
-                           l2.targetSpeed = targetSpeed;
-                           l2.decelerating = true;
-                       }
-                       else if (x < y){
-                           double t = y / c1.speed;
-                           double deltaX = c2.speed * t;
-                           double xPrime =  target - (deltaX - x)%targetSeparation;
-                           double targetSpeed = lane.maxSpeed - a*slowDownTo(lane.maxSpeed,a,x,xPrime);
-                           System.out.println(targetSpeed);
-                           lane.targetSpeed = targetSpeed;
-                           lane.decelerating = true;
-                       }
+                    if (l2.cars.size() != 0 && (!l2.decelerating)){
+                        double dist = lane.gPoint.distance(l2.gPoint);
+                        double cos = calculateAngleBetweenLanes(dist,lane,l2);
+                        Car c1 = lane.cars.get(0),c2 = l2.cars.get(0);
+                        double target = c1.height + c1.width;
+                        if (Math.abs(cos) > 0.001){
+                            double x = dist*cos + c2.point.getY() + c1.point.getX()+ c1.width; //horizontal distance from l1
+                            double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() + c2.point.getX() + c2.width; //vertical distance from l1
+                            double t,deltaY = 0,yPrime = 0;
+                           
+                            if (x >= y){
+                                t = x / l2.maxSpeed;
+                                deltaY =  lane.maxSpeed * t - y;
+                            }
+                            else if (x < y){
+                                t = y / lane.maxSpeed;
+                                deltaY = l2.maxSpeed * t - x;
+                            }
+                            yPrime = target - deltaY%targetSeparation;
+                            
+                            
+                            if (yPrime < 0){
+                                yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
+                                System.out.println("shift");
+                            }
+                            double targetSpeed = l2.maxSpeed*0.9;//l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
+                            l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(c2.point.getY() -yPrime);
+                            l2.targetSpeed = targetSpeed;
+                            l2.decelerating = true;
+                        }
+                        else{
+                            double t = c1.point.getY()/lane.maxSpeed;
+                            double y2 = c2.point.getY();
+                            double deltaY = l2.maxSpeed*t;
+                            double yPrime = target + (deltaY - y2)*targetSeparation;
+                            double targetSpeed = l2.maxSpeed*0.9;
+                            l2.acceleration = (Math.pow(l2.maxSpeed,2) - Math.pow(targetSpeed,2))/(y2 - yPrime);
+                            l2.targetSpeed = targetSpeed;
+                            l2.decelerating = true;
+                            
+                        }
                     }
-                    
                 }
+                break;
             }
         }
         
@@ -206,6 +224,24 @@ public class Joint {
         cars.removeAll(toRemove);
     }
     
+    private List<Lane> sortInLanes(){
+        ArrayList<Lane> sorted = new ArrayList<>();
+        for(Lane l:inLanes){
+            int n = l.cars.size();
+            int count = 0;
+            for(int i = 0;i<sorted.size();i++){
+                if (n > sorted.get(i).cars.size()){
+                    break;
+                }
+                count += 1;
+            }
+            sorted.add(count,l);
+            
+        }
+        return sorted;
+    }
+    
+   
     private double calculateAngleBetweenLanes(double dist,Lane l1,Lane l2){
         double l1x = l1.gPoint.getX(),l1y = l1.gPoint.getY(),l2x =  l2.gPoint.getX() ,l2y = l2.gPoint.getY() ;
         double sinL1 = Math.sin(l1.direction),cosL1 = Math.cos(l1.direction);
@@ -213,12 +249,13 @@ public class Joint {
         
         return cosTheta;
     }
-    private double slowDownTo(double max,double accel,double d,double deltaD){
+    private double deltaV(double max,double accel,double d,double deltaD){
         double a = accel;
         double b = (2*accel*d)/max;
         double c = -(accel/2)*Math.pow(d/max, 2) + deltaD;
         
-        return (-b + Math.sqrt(Math.pow(b,2) - 4*a*c))/(2*a);
+        //return -Math.sqrt(Math.pow(max,2) - accel*(d - deltaD));
+        return -accel*(-b + Math.sqrt(Math.pow(b,2) - 4*a*c))/(2*a);
     }
     
     private boolean inJoint(Car c){

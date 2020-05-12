@@ -123,7 +123,7 @@ public class CitySection extends Model {
         this.carWidth = carWidth;
         this.carHeight = carHeight;
         this.separationX = separationX;
-        this.separation = 2*(carWidth + carHeight);
+        this.separation = 2*(carHeight) + carWidth;
     }
     
     public void joinSection(int ownIndex,CitySection other,int otherLaneIndex){
@@ -217,11 +217,12 @@ public class CitySection extends Model {
                 setLanePath(lane,(Path)data[0]);
                 data[1] = (Integer)data[1] - 1;
             }
+           
         }
         for(Lane l:lanes){
-            l.updateAuto(standardA,interval);
+            l.updateAuto(interval);
         }
-        joint.updateAuto(standardA,interval,2*carHeight + carWidth);
+        joint.updateAuto(standardA,interval,this.separation);
     }
     
     @Override

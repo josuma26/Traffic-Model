@@ -73,11 +73,7 @@ public class Car extends Component{
             this.speed = max;
             this.acceleration = 0;
         }
-        if (this.braking && this.speed <= 0){
-            this.speed = 0;
-            this.acceleration = 0;
-            this.braking = false;
-        }
+        
         this.direction += interval*this.connection.dTheta(this,j);
         this.point.setLocation(this.point.getX() +interval*this.speed*Math.cos(this.direction),this.point.getY() + interval*this.speed*Math.sin(this.direction));
         this.point2.setLocation(this.point2.getX() +interval*this.speed*Math.cos(this.direction),this.point2.getY() + interval*this.speed*Math.sin(this.direction));

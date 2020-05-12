@@ -40,7 +40,7 @@ public class FourWayIntersection extends CitySection{
         addJoint(joint);
         
         
-        setTrafficLights(new double[]{3,0.5,3,0.5}, new int[]{4,5,6,7}, new int[]{0,1,2,3});
+        setTrafficLights(new double[]{3,0.5,3,0.5}, new int[]{2,3,4,5}, new int[]{0,1,6,7});
         
         Lane[][] a = {{leftUpLane}, {leftLane,sidewaysLane,sidewaysLaneBottomRight}};
         Lane[][] b = {{rightLane},{rightUpLane,sidewaysLaneBottomRight,sidewaysLane}};

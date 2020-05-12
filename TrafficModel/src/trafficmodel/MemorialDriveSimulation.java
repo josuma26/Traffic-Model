@@ -90,23 +90,33 @@ public class MemorialDriveSimulation extends Model{
         nav.printEndPoints();
         
         int n = 100;
-        /*
-        riverMemorial.sendCarsFromTo(nav, 0, 4, n, carWidth, carHeight, 10, 10, 20);
-        riverMemorial.sendCarsFromTo(nav, 2, 6, n, carWidth, carHeight, 10, 10, 20);
-        riverMemorial.sendCarsFromTo(nav, 3, 7, n, carWidth, carHeight, 10, 10, 20);
-        riverMemorial.sendCarsFromTo(nav, 1, 8, n, carWidth, carHeight, 10, 10, 20);
-        riverMemorial.sendCarsFromTo(nav, 9, 7, n, carWidth, carHeight, 10, 10, 20);
-        riverMemorial.sendCarsFromTo(nav, 5, 4, n, carWidth, carHeight, 10, 10, 20);
         
-        */
-        riverMemorial.scheduleCars(nav, 0, 4, n,carWidth,carHeight,10);
-        riverMemorial.scheduleCars(nav,2,6,n,carWidth,carHeight,10);
-        riverMemorial.scheduleCars(nav,3,7,n,carWidth,carHeight,10);
-        riverMemorial.scheduleCars(nav,1,8,n,carWidth,carHeight,10);
-        riverMemorial.scheduleCars(nav,9,7,n,carWidth,carHeight,10);
+        
+        
+        
+        
         run();
     }
     
+    @Override
+    public void initialize(){
+        int n = 20;
+        if(selfDriving){
+            riverMemorial.scheduleCars(nav, 0, 4, n,carWidth,carHeight,10);
+            riverMemorial.scheduleCars(nav,2,6,n,carWidth,carHeight,10);
+            riverMemorial.scheduleCars(nav,3,7,n,carWidth,carHeight,10);
+            riverMemorial.scheduleCars(nav,1,8,n,carWidth,carHeight,10);
+            riverMemorial.scheduleCars(nav,9,7,n,carWidth,carHeight,10);
+        }
+        else{
+            riverMemorial.sendCarsFromTo(nav, 0, 4, n, carWidth, carHeight, 10, 10, 20);
+            riverMemorial.sendCarsFromTo(nav, 2, 6, n, carWidth, carHeight, 10, 10, 20);
+            riverMemorial.sendCarsFromTo(nav, 3, 7, n, carWidth, carHeight, 10, 10, 20);
+            riverMemorial.sendCarsFromTo(nav, 1, 8, n, carWidth, carHeight, 10, 10, 20);
+            riverMemorial.sendCarsFromTo(nav, 9, 7, n, carWidth, carHeight, 10, 10, 20);
+            riverMemorial.sendCarsFromTo(nav, 5, 4, n, carWidth, carHeight, 10, 10, 20);
+        }
+    }
     @Override
     public void update(){
         double interval = 0.05;

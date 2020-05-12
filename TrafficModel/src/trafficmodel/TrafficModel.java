@@ -30,11 +30,11 @@ public class TrafficModel {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //GUI gui = new GUI();
+        GUI gui = new GUI();
         
         //runGraphics(new SimpleTraffic());
-        runGraphics(new RunIntersection());
-        //runGraphics(new FourIntersections(3,40,25,0,0,300,50,100,28,30));
+        //runGraphics(new RunIntersection());
+        //runGraphics(new FourIntersections(3,40,30,0,0,300,50,100,28,30));
         //runGraphics(new MemorialDriveSimulation());   
         //runGraphics(new SelfDrivingTest());
                 

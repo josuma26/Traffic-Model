@@ -16,10 +16,12 @@ import java.util.Arrays;
  * @author jsula
  */
 public class FourIntersections extends Model{
-    
     FourWayIntersectionCombine intersection1,intersection2,intersection3,intersection4;
     Navigation nav;
+    double carWidth,carHeight;
     public FourIntersections(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth,int carWidth,int carHeight){
+        this.carHeight = carHeight;
+        this.carWidth = carWidth;
         Lane up1 = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point2D.Double(x + laneLength + laneWidth,y));
         Lane side1 = new Lane(Math.PI,maxSpeed,laneWidth,laneLength,new Point2D.Double(x,y + laneLength + laneWidth));
         intersection1 = new FourWayIntersectionCombine(accel,dist,maxSpeed,x,y,laneLength,laneWidth,jWidth,"Intersection1"); 
@@ -48,33 +50,38 @@ public class FourIntersections extends Model{
         intersection2.setConnections(up2, side2, intersection1.lanes.get(3), intersection4.lanes.get(1));
         intersection3.setConnections(intersection1.lanes.get(0), intersection4.lanes.get(2), side3, up3);
         intersection4.setConnections(intersection2.lanes.get(0),side4,intersection3.lanes.get(3),up4);
-        
-        
-        
-        
-        
+                
         nav = new Navigation(intersection1,intersection2,intersection3,intersection4);
-        int n = 20;
         
-        /*
-        intersection1.sendCarsFromTo(nav, 1, 6, n, carWidth, carHeight, 10, 10, 20);
-        intersection1.sendCarsFromTo(nav,0,5,n,carWidth,carHeight,10,10,20);
-        intersection2.sendCarsFromTo(nav, 3, 2, n , carWidth, carHeight, 10, 10, 20);
-        intersection2.sendCarsFromTo(nav,2,5,n,carWidth, carHeight, 10, 10, 20);
-        intersection3.sendCarsFromTo(nav,4,3,n,carWidth,carHeight,10,10,20);
-        intersection3.sendCarsFromTo(nav,5,3,n,carWidth,carHeight,10,10,20);
-        intersection4.sendCarsFromTo(nav,6,5,n,carWidth,carHeight,10,10,20);
-        intersection4.sendCarsFromTo(nav,7,4,n,carWidth,carHeight,10,10,20);
-          */
-        
-        intersection1.scheduleCars(nav, 1, 6, n, carWidth, carHeight, 10);
-        intersection1.scheduleCars(nav, 0, 5, n, carWidth, carHeight, 10);
-        intersection1.scheduleCars(nav, 3, 2, n, carWidth, carHeight, 10);
-        intersection1.scheduleCars(nav, 2, 5, n, carWidth, carHeight, 10);
-        
+               
         run();
     }
     
+    @Override
+    public void initialize(){
+        int n = 50;
+        if (selfDriving){
+            //intersection1.scheduleCars(nav, 0, 4, n, carWidth, carHeight, 10);
+            intersection2.scheduleCars(nav, 1, 3, n, carWidth, carHeight, 10);
+            intersection3.scheduleCars(nav, 4, 0, n, carWidth, carHeight, 10);
+            intersection4.scheduleCars(nav, 3, 1, n, carWidth, carHeight, 10);
+
+            //intersection1.scheduleCars(nav, 2, 6, n, carWidth, carHeight, 10);
+            intersection1.scheduleCars(nav, 5, 7, n, carWidth, carHeight, 10);
+            intersection3.scheduleCars(nav, 6, 2, n, carWidth, carHeight, 10);
+            intersection4.scheduleCars(nav, 7, 5, n, carWidth, carHeight, 10);
+        }
+        else{
+            intersection1.sendCarsFromTo(nav, 1, 6, n, carWidth, carHeight, 10, 10, 20);
+            intersection1.sendCarsFromTo(nav,0,5,n,carWidth,carHeight,10,10,20);
+            intersection2.sendCarsFromTo(nav, 3, 2, n , carWidth, carHeight, 10, 10, 20);
+            intersection2.sendCarsFromTo(nav,2,5,n,carWidth, carHeight, 10, 10, 20);
+            intersection3.sendCarsFromTo(nav,4,3,n,carWidth,carHeight,10,10,20);
+            intersection3.sendCarsFromTo(nav,5,3,n,carWidth,carHeight,10,10,20);
+            intersection4.sendCarsFromTo(nav,6,5,n,carWidth,carHeight,10,10,20);
+            intersection4.sendCarsFromTo(nav,7,4,n,carWidth,carHeight,10,10,20);
+        }
+    }
     
     @Override
     public void update(){
@@ -91,7 +98,7 @@ public class FourIntersections extends Model{
         intersection1.updateAuto(interval);
         intersection2.updateAuto(interval);
         intersection3.updateAuto(interval);
-        intersection4.updateAuto(interval);        
+        intersection4.updateAuto(interval);   
     }
     
     @Override

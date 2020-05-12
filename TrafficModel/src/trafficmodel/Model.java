@@ -22,6 +22,7 @@ public class Model extends Component{
     //every lane mustoverride update and paint
     protected double startTime;
     int x,y;
+    protected boolean selfDriving = true;
     
     
     public void run(){
@@ -29,8 +30,12 @@ public class Model extends Component{
         Timer timer = new Timer(5,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                //update();
-                updateAuto();
+                if (selfDriving){
+                    updateAuto();
+                }
+                else{
+                    update();
+                }
                 repaint();                
             }
         });
@@ -45,6 +50,15 @@ public class Model extends Component{
     public void updateAuto(){
         
     }
+    
+    public void initialize(){
+        
+    }
+    
+    public void setMode(boolean autonomous){
+        this.selfDriving = autonomous;
+    }
+    
     protected long seconds(){
         return System.nanoTime()/1000000000;
     }
