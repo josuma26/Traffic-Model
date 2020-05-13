@@ -181,7 +181,6 @@ public class Joint {
                             }
                             yPrime = target- deltaY%targetSeparation;
                             if (yPrime < 0){
-                                System.out.println(yPrime);
                                 yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
                             }
 
@@ -193,7 +192,7 @@ public class Joint {
                             double t = c1.point.getY()/lane.maxSpeed;
                             double y2 = c2.point.getY();
                             double deltaY = l2.maxSpeed*t;
-                            double yPrime = target + (deltaY - y2)*targetSeparation;
+                            double yPrime = y2 - deltaY;
                             double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;

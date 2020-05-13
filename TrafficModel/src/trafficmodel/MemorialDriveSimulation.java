@@ -14,62 +14,64 @@ import java.util.Arrays;
  * @author jsula
  */
 public class MemorialDriveSimulation extends Model{
-    ThreeWayIntersection riverMemorial,riverBackstone,riverPutnam,westernMemorial,westernPutnam,westernHew;
-    TIntersection westernBackstone,callenderHew,memorialHingham;
-    TwoWayTIntersection complete;
+    private ThreeWayIntersection riverMemorial,riverBackstone,riverPutnam,westernMemorial,westernPutnam,westernHew;
+    private TIntersection westernBackstone,callenderHew,memorialHingham;
+    private TwoWayTIntersection complete;
     
-    Lane memorial,backstone,riverPutnamDown,riverPutnamUpRight,riverPutnamDownRight,
+    private Lane memorial,backstone,riverPutnamDown,riverPutnamUpRight,riverPutnamDownRight,
             westernHewDown,westernHewUpRight,westernHewDownRight,
             callenderHewUpRight,callenderHewDownRight,
             extraLane;
     
-    double accel = 5,dist = 40,maxSpeed = 25;
-    int x = 0,y = 0,laneWidth = 50,jWidth = 100,carWidth = 30,carHeight = 32;
+    private double accel = 3,dist = 40,maxSpeed = 30;
+    private int x = 0,y = 0,laneWidth = 25,jWidth = 50,carWidth = 15,carHeight = 17,separation = (int)(laneWidth - carWidth)/2;
     
-    Navigation nav;
+    private Navigation nav;
+    
     public MemorialDriveSimulation(){
-        riverMemorial = new ThreeWayIntersection(accel,dist,maxSpeed,x,y + 650,new int[]{100,500,200,200},laneWidth,jWidth,"River-Memorial");
-        memorial = new Lane(Math.PI/2,maxSpeed,laneWidth,100,new Point2D.Double(x + 250,y + 1350));
+        this.WINDOW_WIDTH = 2200;
+        riverMemorial = new ThreeWayIntersection(accel,dist,maxSpeed,x,y + 600,new int[]{150,550,200,200},laneWidth,jWidth,"River-Memorial");
+        memorial = new Lane(Math.PI/2,maxSpeed,laneWidth,150,new Point2D.Double(x + 225,y + 1350));
         riverMemorial.addLoneLane(memorial,1,0,"Rive-memorial down lane");
         riverMemorial.entryIndices.add(new int[]{2,3});
         
-        riverBackstone = new ThreeWayIntersection(accel,dist,maxSpeed,x + 300,y + 650,new int[]{100,500,400,400},laneWidth,jWidth,"River-Backstone");
-        backstone = new Lane(Math.PI/2,maxSpeed,laneWidth,100,new Point2D.Double(x + 750,y + 1350));
+        riverBackstone = new ThreeWayIntersection(accel,dist,maxSpeed,x + 250,y + 600,new int[]{150,550,650,650},laneWidth,jWidth,"River-Backstone");
+        backstone = new Lane(Math.PI/2,maxSpeed,laneWidth,150,new Point2D.Double(x + 925,y + 1350));
         riverBackstone.addLoneLane(backstone,1,0,"River-backstone down lane");
         
-        riverPutnam = new ThreeWayIntersection(accel,dist,maxSpeed,x + 800,y + 650,new int[]{100,500,200,200},laneWidth,jWidth,"River-Putnam");
-        riverPutnamDown = new Lane(Math.PI/2,maxSpeed,laneWidth,100,new Point2D.Double(x + 1050,y + 1350));
-        riverPutnamUpRight = new Lane(0,maxSpeed,laneWidth,250,new Point2D.Double(x + 1350,y + 1100 + laneWidth));
-        riverPutnamDownRight = new Lane(0,maxSpeed,laneWidth,250,new Point2D.Double(x + 1350,y + 1100 + jWidth));
+        riverPutnam = new ThreeWayIntersection(accel,dist,maxSpeed,x + 950,y + 600,new int[]{150,550,550,550},laneWidth,jWidth,"River-Putnam");
+        riverPutnamDown = new Lane(Math.PI/2,maxSpeed,laneWidth,150,new Point2D.Double(x + 1525,y + 1350));
+        riverPutnamUpRight = new Lane(0,maxSpeed,laneWidth,500,new Point2D.Double(x + 2050,y + 1125 + laneWidth));
+        riverPutnamDownRight = new Lane(0,maxSpeed,laneWidth,500,new Point2D.Double(x + 2050,y + 1125 + jWidth));
         riverPutnam.addLoneLane(riverPutnamDown, 1,0, "River-putnam down lane");
         riverPutnam.addLanePair(riverPutnamUpRight,0,"River-putnam sideways up right lane");
         riverPutnam.addLoneLane(riverPutnamDownRight,0,5,"River-putnam sideways down right lane");
         
         
-        westernMemorial = new ThreeWayIntersection(accel,dist,maxSpeed,x,y + 350,new int[]{500,200,200,200},laneWidth,jWidth,"Western-Memorial");
+        westernMemorial = new ThreeWayIntersection(accel,dist,maxSpeed,x,y + 300,new int[]{550,250,200,200},laneWidth,jWidth,"Western-Memorial");
         westernMemorial.entryIndices.add(new int[]{2,3});
         
-        westernBackstone = new TIntersection(accel,dist,maxSpeed,x + 300,y + 550,new int[]{500,400,400},laneWidth,jWidth,"Western-Backstone");
+        westernBackstone = new TIntersection(accel,dist,maxSpeed,x + 250,y + 550,new int[]{550,650,650},laneWidth,jWidth,"Western-Backstone");
         
-        westernPutnam = new ThreeWayIntersection(accel,dist,maxSpeed,x + 800,y  +350,new int[]{500,200,200,200},laneWidth,jWidth,"Western-Putnam");
+        westernPutnam = new ThreeWayIntersection(accel,dist,maxSpeed,x + 950,y  +300,new int[]{550,250,550,550},laneWidth,jWidth,"Western-Putnam");
         
-        westernHew = new ThreeWayIntersection(accel,dist,maxSpeed,x + 1100,y + 350,new int[]{300,200,350,350},laneWidth,jWidth,"Western-hew");
-        westernHewDown = new Lane(Math.PI/2,maxSpeed,laneWidth,300,new Point2D.Double(x + 1500,y + 950));
-        westernHewUpRight = new Lane(0,maxSpeed,laneWidth,100,new Point2D.Double(x + 1650,y + 500 + laneWidth));
-        westernHewDownRight = new Lane(0,maxSpeed,laneWidth,100,new Point2D.Double(x + 1650,y + 500 + jWidth));
+        westernHew = new ThreeWayIntersection(accel,dist,maxSpeed,x + 1550,y + 300,new int[]{300,250,400,400},laneWidth,jWidth,"Western-hew");
+        westernHewDown = new Lane(Math.PI/2,maxSpeed,laneWidth,300,new Point2D.Double(x + 1975,y + 900));
+        westernHewUpRight = new Lane(0,maxSpeed,laneWidth,200,new Point2D.Double(x + 2200,y + 525 + laneWidth));
+        westernHewDownRight = new Lane(0,maxSpeed,laneWidth,200,new Point2D.Double(x + 2200,y + 525 + jWidth));
         westernHew.addLoneLane(westernHewDown, 1, 0, "Western-hew down lane");
         westernHew.addLanePair(westernHewUpRight,0,"Western-hew sideways up right lane");
         westernHew.addLoneLane(westernHewDownRight,0,5,"Western-hew sideways down right lane");
         
-        callenderHew = new TIntersection(accel,dist,maxSpeed,x + 1100,y + 250,new int[]{200,350,350},laneWidth,jWidth,"Callender-Hew");
-        callenderHewUpRight = new Lane(0,maxSpeed,laneWidth,100,new Point2D.Double(x + 1650,y + 200 + laneWidth));
-        callenderHewDownRight = new Lane(0,maxSpeed,laneWidth,100,new Point2D.Double(x + 1650,y + 200 + jWidth));
+        callenderHew = new TIntersection(accel,dist,maxSpeed,x + 1550,y + 250,new int[]{250,400,400},laneWidth,jWidth,"Callender-Hew");
+        callenderHewUpRight = new Lane(0,maxSpeed,laneWidth,400,new Point2D.Double(x + 2400,y + 225 + laneWidth));
+        callenderHewDownRight = new Lane(0,maxSpeed,laneWidth,400,new Point2D.Double(x + 2400,y + 225 + jWidth));
         callenderHew.addLanePair(callenderHewUpRight, 0, "Callender-hew sidewasy up right lane");
         callenderHew.addLoneLane(callenderHewDownRight,0,3,"Callender-Hew sideways down right lane");
 
-        memorialHingham = new TIntersection(accel,dist,maxSpeed,x + 300,y + 250,new int[]{200,700,700},laneWidth,jWidth,"Memorial-Hinghma");
+        memorialHingham = new TIntersection(accel,dist,maxSpeed,x + 250,y + 250,new int[]{250,1250,1250},laneWidth,jWidth,"Memorial-Hinghma");
         
-        complete = new TwoWayTIntersection(accel,dist,maxSpeed,200,0,new int[]{200,250},laneWidth,jWidth,"Extra");
+        complete = new TwoWayTIntersection(accel,dist,maxSpeed,200,0,new int[]{250,250},laneWidth,jWidth,"Extra");
         extraLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,250,new Point2D.Double(200 + laneWidth,0));
         complete.addLoneLane(extraLane,1,1,"Extra Lane");
         
@@ -85,62 +87,57 @@ public class MemorialDriveSimulation extends Model{
         complete.setConnections(memorialHingham.lanes.get(1), memorialHingham.lanes.get(2), extraLane, westernMemorial.lanes.get(1));
         
         nav = new Navigation(riverMemorial,riverBackstone,riverPutnam,westernMemorial,westernBackstone,westernPutnam,westernHew,callenderHew,memorialHingham,complete);
-        //nav.print();
-        
-        
-                
-        
-        run();
+        nav.printEndPoints();
     }
     
     @Override
     public void initialize(){
-        int n = 20;
-        if(selfDriving){
-            riverMemorial.scheduleCars(nav, 0, 4, n,carWidth,carHeight,10);
-            riverMemorial.scheduleCars(nav,2,6,n,carWidth,carHeight,10);
-            riverMemorial.scheduleCars(nav,3,7,n,carWidth,carHeight,10);
-            riverMemorial.scheduleCars(nav,1,8,n,carWidth,carHeight,10);
-            riverMemorial.scheduleCars(nav,9,7,n,carWidth,carHeight,10);
-        }
-        else{
-            riverMemorial.sendCarsFromTo(nav, 0, 4, n, carWidth, carHeight, 10, 10, 20);
-            riverMemorial.sendCarsFromTo(nav, 2, 6, n, carWidth, carHeight, 10, 10, 20);
-            riverMemorial.sendCarsFromTo(nav, 3, 7, n, carWidth, carHeight, 10, 10, 20);
-            riverMemorial.sendCarsFromTo(nav, 1, 8, n, carWidth, carHeight, 10, 10, 20);
-            riverMemorial.sendCarsFromTo(nav, 9, 7, n, carWidth, carHeight, 10, 10, 20);
-            riverMemorial.sendCarsFromTo(nav, 5, 4, n, carWidth, carHeight, 10, 10, 20);
-        }
+        int n = 25;
+        /*
+        riverMemorial.scheduleCars(nav, 0, 4, n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,2,6,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,3,7,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,1,8,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,9,7,n,carWidth,carHeight,separation);
+                */
+        //riverMemorial.scheduleCars(nav,0,9,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,9,0,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,5,7,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,1,4,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,3,8,n,carWidth,carHeight,separation);
+        riverMemorial.scheduleCars(nav,2,8,n,carWidth,carHeight,separation);
     }
     @Override
     public void update(){
         double interval = 0.05;
-        riverMemorial.update(interval);
-        riverBackstone.update(interval);
-        riverPutnam.update(interval);
-        westernMemorial.update(interval);
-        westernBackstone.update(interval);
-        westernPutnam.update(interval);
-        westernHew.update(interval);
-        callenderHew.update(interval);
-        memorialHingham.update(interval);
-        complete.update(interval);
+        riverMemorial.update(interval,nav,intelligent);
+        riverBackstone.update(interval,nav,intelligent);
+        riverPutnam.update(interval,nav,intelligent);
+        westernMemorial.update(interval,nav,intelligent);
+        westernBackstone.update(interval,nav,intelligent);
+        westernPutnam.update(interval,nav,intelligent);
+        westernHew.update(interval,nav,intelligent);
+        callenderHew.update(interval,nav,intelligent);
+        memorialHingham.update(interval,nav,intelligent);
+        complete.update(interval,nav,intelligent);
         
     }
     
     @Override
     public void updateAuto(){
         double interval = 0.05;
-        riverMemorial.updateAuto(interval);
-        riverBackstone.updateAuto(interval);
-        riverPutnam.updateAuto(interval);
-        westernMemorial.updateAuto(interval);
-        westernBackstone.updateAuto(interval);
-        westernPutnam.updateAuto(interval);
-        westernHew.updateAuto(interval);
-        callenderHew.updateAuto(interval);
-        memorialHingham.updateAuto(interval);
-        complete.updateAuto(interval);
+        riverMemorial.updateAuto(interval,nav,intelligent);
+        riverBackstone.updateAuto(interval,nav,intelligent);
+        riverPutnam.updateAuto(interval,nav,intelligent);
+        westernMemorial.updateAuto(interval,nav,intelligent);
+        westernBackstone.updateAuto(interval,nav,intelligent);
+        westernPutnam.updateAuto(interval,nav,intelligent);
+        westernHew.updateAuto(interval,nav,intelligent);
+        callenderHew.updateAuto(interval,nav,intelligent);
+        memorialHingham.updateAuto(interval,nav,intelligent);
+        complete.updateAuto(interval,nav,intelligent);
+        
+       
     }
     
     

@@ -26,7 +26,7 @@ public class FourWayIntersection extends CitySection{
         Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + laneLength + jWidth));
         Lane leftLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + 2*laneLength + jWidth));
         Lane rightUpLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y));
-        Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + laneLength));
+        Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,20 + laneLength,new Point(x + laneLength + laneWidth,y + laneLength));
         Lane sidewaysLane = new Lane(Math.PI,maxSpeed,laneWidth,laneLength,new Point(x,y + laneLength + laneWidth));
         Lane sidewaysLaneUpRight = new Lane(Math.PI,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + jWidth,y + laneLength + laneWidth));
         Lane sidewaysLaneBottom = new Lane(0,maxSpeed,laneWidth,laneLength,new Point(x + laneLength,y + laneLength + laneWidth));

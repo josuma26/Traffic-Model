@@ -21,10 +21,13 @@ import javax.swing.Timer;
 public class Model extends Component{
     //every lane mustoverride update and paint
     protected double startTime;
-    int x,y;
-    protected boolean selfDriving = true;
+    protected int x,y;
+    protected boolean selfDriving = true,intelligent = false;
     
-    int rate = 5;
+    private int rate = 5;
+    
+    public int WINDOW_WIDTH = 1700, WINDOW_HEIGHT = 1400;
+    
     public void run(){
         startTime = seconds();
         Timer timer = new Timer(this.rate,new ActionListener(){

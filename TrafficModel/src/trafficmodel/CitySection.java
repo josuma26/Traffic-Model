@@ -106,6 +106,11 @@ public class CitySection extends Model {
         }
     }
     
+    public void setCarPath(Car c,Path p){
+        for(Lane step:p.connections){
+            c.addStep(step);
+        }
+    }
     
     public void sendCarsFromTo(Navigation nav,int from,int to,int n,double cWidth,double cLength,double startX,double startY,double separation){
         Node fromNode = nav.endpoints.get(from),toNode = nav.endpoints.get(to);
@@ -118,7 +123,7 @@ public class CitySection extends Model {
     public void scheduleCars(Navigation nav, int from, int to, int n,double carWidth,double carHeight,double separationX){
         Node fromNode = nav.endpoints.get(from),toNode = nav.endpoints.get(to);
         Path p = nav.getPath(fromNode, toNode);
-        Object[] pathCount = {p,n};
+        Object[] pathCount = {fromNode,toNode,n,p};
         fromPath.put(fromNode.outEdges.get(0).lane, pathCount);
         this.carWidth = carWidth;
         this.carHeight = carHeight;
@@ -197,32 +202,47 @@ public class CitySection extends Model {
     }
     
     
-    public void update(double interval){
+    public void update(double interval,Navigation nav,boolean intelligent){
         controlTraffic();
+        if (nav != null){
+            enterScheduled(nav,intelligent);
+        }
         for(Lane l:lanes){
             l.update(standardA,standardD,interval);
         }
         joint.update(standardA,interval);
     }
     
-    public void updateAuto(double interval){
+    public void updateAuto(double interval,Navigation nav,boolean intelligent){
         controlTraffic();
-        for(Map.Entry<Lane,Object[]> entry:fromPath.entrySet()){
-            Lane lane = entry.getKey();
-            Object[] data = entry.getValue();
-            if ((lane.distanceToEnd >= separation || lane.cars.size() == 0) && (Integer)data[1] > 0){
-                Car c = new Car(separationX,lane.length,carWidth,carHeight);
-                c.speed = lane.maxSpeed;
-                lane.addCar(c);
-                setLanePath(lane,(Path)data[0]);
-                data[1] = (Integer)data[1] - 1;
-            }
-           
+        if (nav != null){
+            enterScheduled(nav,intelligent);
         }
         for(Lane l:lanes){
             l.updateAuto(standardA,interval);
         }
         joint.updateAuto(standardA,interval,this.separation);
+    }
+    
+    private void enterScheduled(Navigation nav,boolean intelligent){
+        for(Map.Entry<Lane,Object[]> entry:fromPath.entrySet()){
+            Lane lane = entry.getKey();
+            Object[] data = entry.getValue();
+            if ((lane.distanceToEnd >= separation || lane.cars.size() == 0) && (Integer)data[2] > 0){
+                Car c = new Car(separationX,lane.length,carWidth,carHeight);
+                c.speed = lane.maxSpeed;
+                lane.addCar(c);
+                Path p;
+                if (intelligent){
+                   p = nav.getPath((Node)data[0], (Node)data[1]); 
+                }
+                else{
+                    p = (Path)data[3];
+                }
+                setCarPath(c,p);
+                data[2] = (Integer)data[2] - 1;
+            }
+        }
     }
     
     @Override

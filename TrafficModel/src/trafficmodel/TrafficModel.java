@@ -41,12 +41,12 @@ public class TrafficModel {
         
     }
     
-    private static void runGraphics(Component model){
+    private static void runGraphics(Model model){
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 JFrame f = new JFrame();
-                f.setBounds(0, 0, 1700, 1400);
+                f.setBounds(0, 0, model.WINDOW_WIDTH, model.WINDOW_HEIGHT);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.add(model);
                 f.setVisible(true);

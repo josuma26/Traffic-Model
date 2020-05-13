@@ -130,9 +130,7 @@ public class Lane  {
             if (distanceToEdge(c) < 0){
                 toRemove.add(c);
                 left += 1;
-                if (out != null){
-                    out.enter(c,this);
-                }
+                
             }
             
             if (index == cars.size() - 1){
@@ -146,6 +144,11 @@ public class Lane  {
             }
             c.updateNormal(maxSpeed,interval);
             
+        }
+        for(Car c:toRemove){
+            if (out != null){
+                out.enter(c,this);
+             }
         }
         cars.removeAll(toRemove);
         
@@ -171,19 +174,19 @@ public class Lane  {
                 else{
                     c.acceleration = a;
                     targetSpeed = maxSpeed;
+                    decelerating = false;
                 } 
                 
             }
             else{
                 Car inFront = cars.get(index - 1);
                 double d = distance(c,inFront) - c.height - 2*c.height - c.width;
-                double t = (inFront.point.getY())/(2*inFront.speed);
+                double t = (c.point.getY())/(2*c.speed);
                 c.acceleration = 2*(d + (1/2)*inFront.acceleration*Math.pow(t,2) + (inFront.speed - c.speed)*t)/(Math.pow(t,2));
+                
                 
             }
                         
-            
-            
             c.updateNormal(maxSpeed, interval);
             
             if (distanceToEdge(c) < 0){

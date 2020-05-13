@@ -86,17 +86,18 @@ public class GUI {
          container.add(panel3);
          
          JPanel panel5 = new JPanel();
-         JLabel sliderLabel = new JLabel("Car Speed");
+         JLabel sliderLabel = new JLabel("Simulation refresh rate:");
          sliderLabel.setFont(myFont);
          
          JSlider speed = new JSlider(JSlider.HORIZONTAL,
-             0, 100, 50);
+             5, 20, 10);
          speed.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
 
-         speed.setMajorTickSpacing(20);
-         speed.setMinorTickSpacing(10);
+         speed.setMajorTickSpacing(10);
+         speed.setMinorTickSpacing(5);
          speed.setPaintTicks(true);
          speed.setPaintLabels(true);
+         speed.setValue(5);
          panel5.add(sliderLabel);
          panel5.add(speed);
          container.add(panel5);
@@ -119,9 +120,11 @@ public class GUI {
                     m = new RunIntersection();
                 }
                 m.selfDriving = checkBox1.isSelected();
-                m.setRefreshRate(speed.getValue());
+                m.intelligent = checkBox2.isSelected();
+                int rate = speed.getValue();
+                m.setRefreshRate(rate);
                 m.initialize();
-                
+                m.run();
                 runGraphics(m);
             }
          });
@@ -181,7 +184,7 @@ public class GUI {
             @Override
             public void run() {
                 JFrame f = new JFrame();
-                f.setBounds(0, 0, 1700, 1400);
+                f.setBounds(0, 0,model.WINDOW_WIDTH, model.WINDOW_HEIGHT);
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.add(model);
                 f.setVisible(true);

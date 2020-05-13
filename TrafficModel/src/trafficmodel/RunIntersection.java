@@ -21,14 +21,14 @@ public class RunIntersection extends Model {
     FourWayIntersection intersection;
     
     public RunIntersection(){
+        this.WINDOW_WIDTH = 1400;
         intersection = new FourWayIntersection(5,40,40,0,0,650,50,100);
         intersection.carWidth = 30;
         intersection.carHeight = 32;
         intersection.separation = 2*(32) + 30;
         intersection.separationX = 10;
              
-        
-        run();
+       
     }
     
     @Override
@@ -67,17 +67,13 @@ public class RunIntersection extends Model {
     
     @Override
     public void update(){
-        intersection.update(0.05);
+        intersection.update(0.05,null,intelligent);
     }
     
     @Override
     public void updateAuto(){
-        intersection.updateAuto(0.05);
-        Lane l = intersection.lanes.get(2);
-        if (l.cars.size() > 0){
-            Car c = l.cars.get(0);
-            //System.out.printf("A: %.1f S: %.1f T: %.1f\n",c.acceleration,c.speed,l.targetSpeed);
-        }
+        intersection.updateAuto(0.05,null,intelligent);
+        
         
         
         
