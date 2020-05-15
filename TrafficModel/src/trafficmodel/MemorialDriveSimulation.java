@@ -23,7 +23,7 @@ public class MemorialDriveSimulation extends Model{
             callenderHewUpRight,callenderHewDownRight,
             extraLane;
     
-    private double accel = 3,dist = 40,maxSpeed = 30;
+    private double accel = 3,dist = 40,maxSpeed = 40;
     private int x = 0,y = 0,laneWidth = 25,jWidth = 50,carWidth = 15,carHeight = 17,separation = (int)(laneWidth - carWidth)/2;
     
     private Navigation nav;
@@ -87,25 +87,20 @@ public class MemorialDriveSimulation extends Model{
         complete.setConnections(memorialHingham.lanes.get(1), memorialHingham.lanes.get(2), extraLane, westernMemorial.lanes.get(1));
         
         nav = new Navigation(riverMemorial,riverBackstone,riverPutnam,westernMemorial,westernBackstone,westernPutnam,westernHew,callenderHew,memorialHingham,complete);
-        nav.printEndPoints();
+        
     }
+    
     
     @Override
     public void initialize(){
-        int n = 25;
-        /*
-        riverMemorial.scheduleCars(nav, 0, 4, n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,2,6,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,3,7,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,1,8,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,9,7,n,carWidth,carHeight,separation);
-                */
-        //riverMemorial.scheduleCars(nav,0,9,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,9,0,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,5,7,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,1,4,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,3,8,n,carWidth,carHeight,separation);
-        riverMemorial.scheduleCars(nav,2,8,n,carWidth,carHeight,separation);
+        int n = 100;
+        totalCars = n*5;
+        riverMemorial.scheduleCars(nav,0,n,carWidth,carHeight,separation,2,3,4,6,7,8,9);
+        riverMemorial.scheduleCars(nav, 1, n, carWidth, carHeight, separation, 2,3,4,6,7,8,9);
+        riverMemorial.scheduleCars(nav, 2, n, carWidth, carHeight, separation, 4,6,7,8);
+        riverMemorial.scheduleCars(nav,3,n,carWidth,carHeight,separation,6,7,8);
+        riverMemorial.scheduleCars(nav,9,n,carWidth,carHeight,separation,0,2,3,4,6,7,8);
+        
     }
     @Override
     public void update(){
@@ -121,6 +116,7 @@ public class MemorialDriveSimulation extends Model{
         memorialHingham.update(interval,nav,intelligent);
         complete.update(interval,nav,intelligent);
         
+        done = left(nav) == totalCars;
     }
     
     @Override
@@ -137,7 +133,7 @@ public class MemorialDriveSimulation extends Model{
         memorialHingham.updateAuto(interval,nav,intelligent);
         complete.updateAuto(interval,nav,intelligent);
         
-       
+       done =  left(nav) == totalCars;
     }
     
     
@@ -155,4 +151,6 @@ public class MemorialDriveSimulation extends Model{
         memorialHingham.paint(g);
         complete.paint(g);
     }
+    
+    
 }

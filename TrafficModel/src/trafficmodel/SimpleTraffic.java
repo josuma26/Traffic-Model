@@ -86,7 +86,7 @@ public class SimpleTraffic extends Component{
         Font f = new Font(Font.SANS_SERIF,Font.PLAIN,32);
         g2.setFont(f);
         g2.drawString("Human Drivers:", 350, 150);
-        normal.update(a,d,1);
+        //normal.update(a,d,1);
         TrafficGraphics.drawLane(g2,normal);
         TrafficGraphics.drawLane(g2, selfDriving);
         g2.setColor(Color.BLACK);

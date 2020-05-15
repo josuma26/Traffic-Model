@@ -22,12 +22,13 @@ public class Model extends Component{
     //every lane mustoverride update and paint
     protected double startTime;
     protected int x,y;
-    protected boolean selfDriving = true,intelligent = false;
+    protected boolean selfDriving = true,intelligent = false,done = false;
     
-    private int rate = 5;
+    private int rate = 1;
     
     public int WINDOW_WIDTH = 1700, WINDOW_HEIGHT = 1400;
     
+    protected int totalCars;
     public void run(){
         startTime = seconds();
         Timer timer = new Timer(this.rate,new ActionListener(){
@@ -38,6 +39,11 @@ public class Model extends Component{
                 }
                 else{
                     update();
+                }
+                if (done){
+                    System.out.println(seconds() - startTime);
+                    System.exit(1);
+                    
                 }
                 repaint();                
             }
@@ -72,6 +78,16 @@ public class Model extends Component{
     
     protected void drawTimer(Graphics g){
         TrafficGraphics.drawTimer(g, seconds(), startTime);
+    }
+    
+    protected int left(Navigation nav){
+        int left = 0;
+        for(Node n:nav.endpoints){
+            for(Edge e:n.inEdges){
+                left += e.lane.left;
+            }
+        }
+        return left;
     }
     
     

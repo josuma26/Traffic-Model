@@ -86,7 +86,7 @@ public class Lane  {
     }
       
     
-    public void update(double a,double d,double interval){
+    public void update(double a,double d,double interval,boolean intelligent,Navigation nav){
         ArrayList<Car> toRemove= new ArrayList<>();
         if (light != null){
             go = light.getState() == 0;
@@ -147,7 +147,7 @@ public class Lane  {
         }
         for(Car c:toRemove){
             if (out != null){
-                out.enter(c,this);
+                out.enter(c,this,intelligent,nav);
              }
         }
         cars.removeAll(toRemove);
@@ -158,7 +158,7 @@ public class Lane  {
         return c.point.getY() - overflow;
     }
     
-    public void updateAuto(double a,double interval){
+    public void updateAuto(double a,double interval,boolean intelligent,Navigation nav){
         ArrayList<Car> toRemove = new ArrayList<>();
         for(int index = 0;index < cars.size();index++){
             Car c = cars.get(index);
@@ -184,7 +184,6 @@ public class Lane  {
                 double t = (c.point.getY())/(2*c.speed);
                 c.acceleration = 2*(d + (1/2)*inFront.acceleration*Math.pow(t,2) + (inFront.speed - c.speed)*t)/(Math.pow(t,2));
                 
-                
             }
                         
             c.updateNormal(maxSpeed, interval);
@@ -207,7 +206,7 @@ public class Lane  {
         }
         for(Car c:toRemove){
             if (out != null){
-                out.enter(c,this);
+                out.enter(c,this,intelligent,nav);
              }
         }
         cars.removeAll(toRemove);
@@ -215,7 +214,7 @@ public class Lane  {
     
     
     public int timeToCross(){
-        return (int) (length/maxSpeed + cars.size());
+        return (int) (length/maxSpeed + Math.sqrt(2*length/5)*cars.size());
     }
     
     public double accelerationFunction(int n,double a){

@@ -86,3 +86,17 @@ class TurnLeft extends Connection{
     }
 }
 
+class UTurn extends Connection{
+    public UTurn(){
+        this.quadrants = new int[]{0,1,2,3};
+    }
+    
+    @Override
+    public double dTheta(Car c,Joint j){
+        if (Double.isNaN(c.turning)){
+            c.turning = -c.point.getX()/8;
+        }
+        return c.speed/c.turning;
+    }
+}
+

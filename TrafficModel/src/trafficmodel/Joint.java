@@ -78,7 +78,7 @@ public class Joint {
     }
     
     
-    public void enter(Car c,Lane lane){
+    public void enter(Car c,Lane lane,boolean intelligent,Navigation nav) {
         double[] newCoords = coordsFromLane(c,lane);
         c.direction = lane.direction ;
         c.point.setLocation(newCoords[0],newCoords[1]);
@@ -87,7 +87,11 @@ public class Joint {
         
         
         this.cars.add(c);
-
+        
+        if (intelligent && c.steps.get(c.currentStep).full){
+            c.recalculateRoute(nav);
+        }
+        
         Lane[] possibleDestinations = (Lane[]) connections.get(lane);
         for(int i = 0;i<possibleDestinations.length;i++){
             if (c.steps.get(c.currentStep).equals(possibleDestinations[i])){
@@ -272,14 +276,14 @@ public class Joint {
 class DirectJoint extends Joint{
     public DirectJoint(Point p1,double width,double height,double maxSpeed){
         super(p1,width,height,maxSpeed);
-        paths = new Connection[]{new Straight(),new TurnRight(),new TurnLeft()};
+        paths = new Connection[]{new Straight(),new TurnRight(),new TurnLeft(),new UTurn()};
     }
 }
 
 class Junction extends Joint{
     public Junction(Point p1,double width,double height,double maxSpeed){
         super(p1,width,height,maxSpeed);
-        paths = new Connection[]{new Straight(), new TurnRight()};
+        paths = new Connection[]{new Straight(), new TurnRight(),new UTurn()};
     }
 }
 

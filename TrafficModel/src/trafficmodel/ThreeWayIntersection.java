@@ -42,10 +42,10 @@ public class ThreeWayIntersection extends CitySection{
     }
     
     public void setConnections(Lane upRight,Lane rightBottom,Lane sidewaysUpRight,Lane left){
-        Lane[][] a = {{lanes.get(0)},{upRight,rightBottom,null}};
-        Lane[][] b = {{lanes.get(1)},{left,null,rightBottom}};
-        Lane[][] c = {{lanes.get(2)},{rightBottom,left,upRight}};
-        Lane[][] d = {{lanes.get(3)},{sidewaysUpRight, left,upRight}};
+        Lane[][] a = {{lanes.get(0)},{upRight,rightBottom,null,left}};
+        Lane[][] b = {{lanes.get(1)},{left,null,rightBottom,upRight}};
+        Lane[][] c = {{lanes.get(2)},{rightBottom,left,upRight,null}};
+        Lane[][] d = {{lanes.get(3)},{sidewaysUpRight, null,null,null}};
         
         joint.setOutLanes(new Lane[]{upRight,rightBottom,sidewaysUpRight,left});
         int[] order = {0,2,2,3};

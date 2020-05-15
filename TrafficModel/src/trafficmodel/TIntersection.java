@@ -40,9 +40,9 @@ public class TIntersection extends CitySection {
     }
     
     public void setConnections(Lane rightBottom,Lane sidewaysUpRight,Lane left){
-        Lane[][] a = {{lanes.get(0)},{null,rightBottom}};
-        Lane[][] b = {{lanes.get(1)},{rightBottom,null}};
-        Lane[][] c = {{lanes.get(2)},{sidewaysUpRight,null}};
+        Lane[][] a = {{lanes.get(0)},{null,rightBottom,left}};
+        Lane[][] b = {{lanes.get(1)},{rightBottom,left,null}};
+        Lane[][] c = {{lanes.get(2)},{sidewaysUpRight,null,null}};
         
         joint.setOutLanes(new Lane[]{rightBottom,sidewaysUpRight,left});
         int[] order = {0,3,3};

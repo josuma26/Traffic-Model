@@ -105,7 +105,6 @@ public class Navigation {
             path.add(0,from);
         }
         Path p = new Path(path);
-        
         return p;
         
     }

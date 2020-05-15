@@ -99,32 +99,30 @@ public class CitySection extends Model {
     }
     
     public void setLanePath(Lane from,Path p){
-        for(Lane step:p.connections){
-            for(Car c:from.cars){
-                c.addStep(step);
-            }
+        for(Car c:from.cars){
+            c.setPath(p);
         }
+        
     }
     
     public void setCarPath(Car c,Path p){
-        for(Lane step:p.connections){
-            c.addStep(step);
+        c.setPath(p);
+    }
+    
+    
+    
+    public void scheduleCars(Navigation nav,int from,int n,double carWidth,double carHeight,double separationX,int ... to){
+        Node fromNode = nav.endpoints.get(from);
+        Node[] destinations = new Node[to.length];
+        Path[] paths = new Path[to.length];
+        for(int i = 0;i<to.length;i++){
+            Node dest = nav.endpoints.get(to[i]);
+            Path p = nav.getPath(fromNode, dest);
+            destinations[i] = dest;
+            paths[i] = p;
         }
-    }
-    
-    public void sendCarsFromTo(Navigation nav,int from,int to,int n,double cWidth,double cLength,double startX,double startY,double separation){
-        Node fromNode = nav.endpoints.get(from),toNode = nav.endpoints.get(to);
-        Path p = nav.getPath(fromNode, toNode);
-        Lane entry = fromNode.outEdges.get(0).lane;
-        addCarsLane(cWidth,cLength,startX,startY,separation,entry,n);
-        setLanePath(entry,p);
-    }
-    
-    public void scheduleCars(Navigation nav, int from, int to, int n,double carWidth,double carHeight,double separationX){
-        Node fromNode = nav.endpoints.get(from),toNode = nav.endpoints.get(to);
-        Path p = nav.getPath(fromNode, toNode);
-        Object[] pathCount = {fromNode,toNode,n,p};
-        fromPath.put(fromNode.outEdges.get(0).lane, pathCount);
+        Object[] pathCount = {fromNode,destinations,n,paths};
+        fromPath.put(fromNode.outEdges.get(0).lane,pathCount);
         this.carWidth = carWidth;
         this.carHeight = carHeight;
         this.separationX = separationX;
@@ -208,7 +206,7 @@ public class CitySection extends Model {
             enterScheduled(nav,intelligent);
         }
         for(Lane l:lanes){
-            l.update(standardA,standardD,interval);
+            l.update(standardA,standardD,interval,intelligent,nav);
         }
         joint.update(standardA,interval);
     }
@@ -219,7 +217,7 @@ public class CitySection extends Model {
             enterScheduled(nav,intelligent);
         }
         for(Lane l:lanes){
-            l.updateAuto(standardA,interval);
+            l.updateAuto(standardA,interval,intelligent,nav);
         }
         joint.updateAuto(standardA,interval,this.separation);
     }
@@ -228,19 +226,26 @@ public class CitySection extends Model {
         for(Map.Entry<Lane,Object[]> entry:fromPath.entrySet()){
             Lane lane = entry.getKey();
             Object[] data = entry.getValue();
-            if ((lane.distanceToEnd >= separation || lane.cars.size() == 0) && (Integer)data[2] > 0){
+            Node from = (Node) data[0];
+            Node[] destinations = (Node[])data[1];
+            int n = (Integer)data[2];
+            Path[] paths = (Path[])data[3];
+            if ((lane.distanceToEnd >= separation || lane.cars.size() == 0) && n> 0){
                 Car c = new Car(separationX,lane.length,carWidth,carHeight);
                 c.speed = lane.maxSpeed;
                 lane.addCar(c);
                 Path p;
+                int choice = (int)(Math.random()*destinations.length);
+                Node to = destinations[choice];
+                Path path = paths[choice];
                 if (intelligent){
-                   p = nav.getPath((Node)data[0], (Node)data[1]); 
+                   p = nav.getPath(from,to);
                 }
                 else{
-                    p = (Path)data[3];
+                    p = path;
                 }
                 setCarPath(c,p);
-                data[2] = (Integer)data[2] - 1;
+                data[2] = n - 1;
             }
         }
     }

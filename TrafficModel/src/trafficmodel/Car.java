@@ -23,10 +23,12 @@ public class Car extends Component{
     double width,height,speed,acceleration,direction;
     boolean braking,priority;
     ArrayList<Lane> steps;
+    ArrayList<Node> nodes;
     int currentStep = 1;
     Connection connection;
     double t = 0;
     
+    Color color = Color.GREEN;
     
     
     int n = -1;
@@ -96,6 +98,7 @@ public class Car extends Component{
         }
         
         this.priority = !stop;
+        
         if (stop || steps.get(currentStep).full){
             this.acceleration = 0;
             this.speed = 0;
@@ -116,6 +119,23 @@ public class Car extends Component{
         this.direction += interval*this.connection.dTheta(this,j);
         this.point.setLocation(this.point.getX() +interval*this.speed*Math.cos(this.direction),this.point.getY() + interval*this.speed*Math.sin(this.direction));
         this.point2.setLocation(this.point2.getX() +interval*this.speed*Math.cos(this.direction),this.point2.getY() + interval*this.speed*Math.sin(this.direction));
+    }
+    
+    public void setPath(Path p){
+        this.steps = p.connections;
+        this.nodes = p.steps;
+    }
+    
+    public void recalculateRoute(Navigation nav) {
+       Node from = this.nodes.get(this.currentStep),to = this.nodes.get(nodes.size() - 1);
+       Lane current = steps.get(currentStep-1);
+       Path p = nav.getPath(from, to);
+       p.connections.add(0,current);
+       
+       color = Color.BLUE;
+       setPath(p);
+       currentStep = 1;
+        
     }
     
     private boolean willCollide(Car c){

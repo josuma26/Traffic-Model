@@ -29,8 +29,8 @@ public class Path{
         steps = new ArrayList<>();
         connections = new ArrayList<>();
         length = 0;
-        steps.add(nodes.get(0));
-        for(Node n:nodes.subList(1, nodes.size())){
+        steps.add(nodes.get(1));
+        for(Node n:nodes.subList(2, nodes.size())){
             this.add(n);
         }
     }

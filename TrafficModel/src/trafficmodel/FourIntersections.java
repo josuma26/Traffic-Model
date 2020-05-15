@@ -59,15 +59,29 @@ public class FourIntersections extends Model{
     @Override
     public void initialize(){
         int n = 20;
-        intersection1.scheduleCars(nav, 0, 4, n, carWidth, carHeight, 10);
-        intersection2.scheduleCars(nav, 1, 3, n, carWidth, carHeight, 10);
-        intersection3.scheduleCars(nav, 4, 0, n, carWidth, carHeight, 10);
-        intersection4.scheduleCars(nav, 3, 1, n, carWidth, carHeight, 10);
+        totalCars = 8*n;
+        if (selfDriving){
+            intersection1.scheduleCars(nav, 0, n, carWidth, carHeight, 10, 4);
+            intersection2.scheduleCars(nav, 1, n, carWidth, carHeight, 10, 3);
+            intersection3.scheduleCars(nav, 4, n, carWidth, carHeight, 10, 0);
+            intersection4.scheduleCars(nav, 3, n, carWidth, carHeight, 10, 1);
 
-        intersection1.scheduleCars(nav, 2, 6, n, carWidth, carHeight, 10);
-        intersection1.scheduleCars(nav, 5, 7, n, carWidth, carHeight, 10);
-        intersection3.scheduleCars(nav, 6, 2, n, carWidth, carHeight, 10);
-        intersection4.scheduleCars(nav, 7, 5, n, carWidth, carHeight, 10);
+            intersection1.scheduleCars(nav, 2, n, carWidth, carHeight, 10, 6);
+            intersection1.scheduleCars(nav, 5, n, carWidth, carHeight, 10, 7);
+            intersection3.scheduleCars(nav, 6, n, carWidth, carHeight, 10, 2);
+            intersection4.scheduleCars(nav, 7, n, carWidth, carHeight, 10, 5);
+        }
+        else{
+            intersection1.scheduleCars(nav, 0, n, carWidth, carHeight, 10, 4);
+            intersection2.scheduleCars(nav, 1, n, carWidth, carHeight, 10, 0);
+            intersection3.scheduleCars(nav, 4, n, carWidth, carHeight, 10, 0);
+            intersection4.scheduleCars(nav, 3, n, carWidth, carHeight, 10, 1);
+
+            intersection1.scheduleCars(nav, 2, n, carWidth, carHeight, 10, 6);
+            intersection1.scheduleCars(nav, 5, n, carWidth, carHeight, 10, 7);
+            intersection3.scheduleCars(nav, 6, n, carWidth, carHeight, 10, 2);
+            intersection4.scheduleCars(nav, 7, n, carWidth, carHeight, 10, 5);
+        }
         
         
     }
@@ -78,7 +92,9 @@ public class FourIntersections extends Model{
         intersection1.update(interval,nav,intelligent);
         intersection2.update(interval,nav,intelligent);
         intersection3.update(interval,nav,intelligent);
-        intersection4.update(interval,nav,intelligent);        
+        intersection4.update(interval,nav,intelligent);  
+        
+        done = left(nav) == totalCars;
     }
     
     @Override
@@ -89,6 +105,7 @@ public class FourIntersections extends Model{
         intersection3.updateAuto(interval,nav,intelligent);
         intersection4.updateAuto(interval,nav,intelligent); 
         
+        done = left(nav) == totalCars;
     }
     
     @Override

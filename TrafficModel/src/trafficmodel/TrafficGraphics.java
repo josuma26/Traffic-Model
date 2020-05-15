@@ -21,7 +21,7 @@ import java.awt.geom.Rectangle2D;
 public class TrafficGraphics {
     
     public static void drawCar(Graphics2D g2,Car c,double cX,double cY,AffineTransform rotation){
-        g2.setColor(Color.GREEN);
+        g2.setColor(c.color);
         Shape rotated = rotation.createTransformedShape(new Rectangle2D.Double(cX + c.point.getX(), cY + c.point.getY(), c.width, c.height));
         g2.fill(rotated);   
         
