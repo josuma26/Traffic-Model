@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -164,9 +165,9 @@ public class GUI {
             }
         });
        
-    //     button1.setIcon(new ImageIcon("/Users/liquelyn/Desktop/intersection1.jpg"));
-    //     button2.setIcon(new ImageIcon("/Users/liquelyn/Desktop/intersection2.jpg"));
-    //     button3.setIcon(new ImageIcon("/Users/liquelyn/Desktop/intersection3.jpg"));
+         button1.setIcon(new ImageIcon(GUI.class.getResource("/intersection1.png")));
+         button2.setIcon(new ImageIcon(GUI.class.getResource("/intersection2.png")));
+         button3.setIcon(new ImageIcon(GUI.class.getResource("/intersection3.png")));
     //     button4.setIcon(new ImageIcon("/Users/liquelyn/Desktop/intersection4.jpg"));
          
          panel2.add(button1);
@@ -185,7 +186,7 @@ public class GUI {
             public void run() {
                 JFrame f = new JFrame();
                 f.setBounds(0, 0,model.WINDOW_WIDTH, model.WINDOW_HEIGHT);
-                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 f.add(model);
                 f.setVisible(true);
             }
