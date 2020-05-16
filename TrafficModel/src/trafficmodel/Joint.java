@@ -87,7 +87,7 @@ public class Joint {
         
         
         this.cars.add(c);
-        
+        c.acceleration = 0;
         if (intelligent && c.steps.get(c.currentStep).full){
             c.recalculateRoute(nav);
         }
@@ -169,7 +169,7 @@ public class Joint {
                         double dist = lane.gPoint.distance(l2.gPoint);
                         double cos = calculateAngleBetweenLanes(dist,lane,l2);
                         Car c1 = lane.cars.get(0),c2 = l2.cars.get(0);
-                        double target = c1.height + c1.width;
+                        double target = c1.height + 2*c1.width;
                         if (Math.abs(cos) > 0.001){
                             double x = dist*cos + c2.point.getY() + c1.point.getX(); //horizontal distance from l1
                             double y = dist*Math.sin(Math.acos(cos)) + c1.point.getY() - c2.point.getX() - c2.width; //vertical distance from l1
@@ -188,7 +188,8 @@ public class Joint {
                                 yPrime = targetSeparation - deltaY%targetSeparation + target + c1.width;
                             }
 
-                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
+                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime,1);
+                            System.out.println(targetSpeed);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                         }
@@ -196,8 +197,11 @@ public class Joint {
                             double t = c1.point.getY()/lane.maxSpeed;
                             double y2 = c2.point.getY();
                             double deltaY = l2.maxSpeed*t;
-                            double yPrime = y2 - deltaY;
-                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime);
+                            double yPrime = deltaY - y2;
+                            if (yPrime < 0){
+                                yPrime = -2*yPrime;
+                            }
+                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime,100);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                             
@@ -249,13 +253,12 @@ public class Joint {
         
         return cosTheta;
     }
-    private double deltaV(double max,double accel,double d,double deltaD){
-        double a = -accel;
-        double b = -accel*((deltaD/max) + 1);
-        double c = (1/2)*accel*Math.pow(deltaD/max,2) + deltaD - d;
-        
-        //return -Math.sqrt(Math.pow(max,2) - accel*(d - deltaD));
-        return -accel*(-b + Math.sqrt(Math.pow(b,2) - 4*a*c))/(2*a);
+    private double deltaV(double max,double accel,double d,double deltaD,double s){
+        double a = accel;
+        double b = -(2*accel*(s-deltaD))/max;
+        double c = Math.pow((s-deltaD)/max,2)*accel/2 - deltaD - s;
+        double t = (-b + Math.sqrt(Math.pow(b,2) - 4*a*c))/(2*a);
+        return -accel*t;
     }
     
     private boolean inJoint(Car c){

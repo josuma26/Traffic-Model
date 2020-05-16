@@ -23,7 +23,7 @@ public class MemorialDriveSimulation extends Model{
             callenderHewUpRight,callenderHewDownRight,
             extraLane;
     
-    private double accel = 3,dist = 40,maxSpeed = 40;
+    private double accel = 3,dist = 40,maxSpeed = 20;
     private int x = 0,y = 0,laneWidth = 25,jWidth = 50,carWidth = 15,carHeight = 17,separation = (int)(laneWidth - carWidth)/2;
     
     private Navigation nav;

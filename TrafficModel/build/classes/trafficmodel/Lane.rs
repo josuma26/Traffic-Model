@@ -1,2 +1,0 @@
-trafficmodel.InfiniteLane
-trafficmodel.Lane

@@ -174,7 +174,7 @@ public class Lane  {
                 else{
                     c.acceleration = a;
                     targetSpeed = maxSpeed;
-                    decelerating = false;
+                    //decelerating = false;
                 } 
                 
             }

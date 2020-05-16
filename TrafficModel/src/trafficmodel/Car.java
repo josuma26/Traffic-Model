@@ -132,7 +132,6 @@ public class Car extends Component{
        Path p = nav.getPath(from, to);
        p.connections.add(0,current);
        
-       color = Color.BLUE;
        setPath(p);
        currentStep = 1;
         

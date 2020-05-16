@@ -216,12 +216,31 @@ public class CitySection extends Model {
         if (nav != null){
             enterScheduled(nav,intelligent);
         }
+        else{
+            enter();
+        }
         for(Lane l:lanes){
             l.updateAuto(standardA,interval,intelligent,nav);
         }
         joint.updateAuto(standardA,interval,this.separation);
     }
     
+    private void enter(){
+        for(Map.Entry<Lane,Object[]> entry:fromPath.entrySet()){
+            Lane lane = entry.getKey();
+            Object[] data = entry.getValue();
+            int n = (Integer)data[2];
+            Path paths[] = (Path[])data[3];
+            if ((lane.distanceToEnd >= separation || lane.cars.size() == 0) && n> 0){
+                Car c = new Car(separationX,lane.length,carWidth,carHeight);
+                c.speed = lane.maxSpeed;
+                lane.addCar(c);
+                
+                setCarPath(c,paths[0]);
+                data[2] = n - 1;
+            }
+        }
+    }
     private void enterScheduled(Navigation nav,boolean intelligent){
         for(Map.Entry<Lane,Object[]> entry:fromPath.entrySet()){
             Lane lane = entry.getKey();
@@ -236,9 +255,9 @@ public class CitySection extends Model {
                 lane.addCar(c);
                 Path p;
                 int choice = (int)(Math.random()*destinations.length);
-                Node to = destinations[choice];
                 Path path = paths[choice];
                 if (intelligent){
+                    Node to = destinations[choice];
                    p = nav.getPath(from,to);
                 }
                 else{

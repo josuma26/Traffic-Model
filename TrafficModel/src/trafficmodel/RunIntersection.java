@@ -35,17 +35,12 @@ public class RunIntersection extends Model {
     public void initialize(){
         int n = 20;
         if (selfDriving){
-            Path p = new Path(new Lane[]{intersection.lanes.get(0),intersection.lanes.get(6)});
-            intersection.fromPath.put(intersection.lanes.get(0),new Object[]{p,n});
-
-            Path p2 = new Path(new Lane[]{intersection.lanes.get(2),intersection.lanes.get(5)});
-            intersection.fromPath.put(intersection.lanes.get(2),new Object[]{p2,n});
-
-            Path p3 = new Path(new Lane[]{intersection.lanes.get(1),intersection.lanes.get(4)});
-            intersection.fromPath.put(intersection.lanes.get(1),new Object[]{p3,n});
-
-            Path p4 = new Path(new Lane[]{intersection.lanes.get(3),intersection.lanes.get(7)});
-            intersection.fromPath.put(intersection.lanes.get(3),new Object[]{p4,n});
+            schedule(0,6,n);
+            schedule(2,5,n);
+            schedule(1,4,n);
+            schedule(3,7,n);
+            
+            
         }
         else{
            intersection.addCars(intersection.carWidth, intersection.carHeight, intersection.separationX , intersection.separationX , 12, new int[]{0,n},new int[]{2,n},new int[]{1,n},new int[]{3,n});
@@ -58,6 +53,13 @@ public class RunIntersection extends Model {
            intersection.setLaneNextStep(3,3);
            intersection.setLaneNextStep(3,7);
         }
+    }
+    
+    private void schedule(int from,int to,int n){
+        Lane fromLane = intersection.lanes.get(from);
+        Lane toLane = intersection.lanes.get(to);
+        Path p = new Path(new Lane[]{fromLane,toLane});
+        intersection.fromPath.put(fromLane, new Object[]{null,null,n,new Path[]{p}});
     }
     @Override
     public void paint(Graphics g){
@@ -73,9 +75,6 @@ public class RunIntersection extends Model {
     @Override
     public void updateAuto(){
         intersection.updateAuto(0.05,null,intelligent);
-        
-        
-        
         
     }
 }

@@ -1,4 +1,0 @@
-trafficmodel.DirectJoint
-trafficmodel.LaneJoint
-trafficmodel.Junction
-trafficmodel.Joint
