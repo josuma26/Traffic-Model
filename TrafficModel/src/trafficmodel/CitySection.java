@@ -205,6 +205,9 @@ public class CitySection extends Model {
         if (nav != null){
             enterScheduled(nav,intelligent);
         }
+        else{
+            enter();
+        }
         for(Lane l:lanes){
             l.update(standardA,standardD,interval,intelligent,nav);
         }
@@ -236,7 +239,7 @@ public class CitySection extends Model {
                 c.speed = lane.maxSpeed;
                 lane.addCar(c);
                 
-                setCarPath(c,paths[0]);
+                setCarPath(c,paths[(int)(Math.random()*paths.length)]);
                 data[2] = n - 1;
             }
         }

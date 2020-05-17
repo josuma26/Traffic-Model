@@ -9,6 +9,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -57,31 +60,30 @@ public class GUI {
         JLabel label1 = new JLabel("Choose a simulation time: ");
         label1.setFont(myFont);
         panel1.add(label1);
-        String[] numbers = {"11:00-12:00", "12:00-13:00", "13:00-14:00",
-          "14:00-15:00", "15:00-16:00","17:00-18:00"};
+        String[] numbers = {"00:00 - 01:00","01:00 - 02:00","02:00 - 03:00","03:00 - 04:00","04:00 - 05:00","05:00 - 06:00", "06:00 - 07:00","07:00 - 08:00","08:00 - 09:00",
+            "09:00 - 10:00","10:00 - 11:00","11:00 - 12:00", "12:00 - 13:00", "13:00 - 14:00","14:00 - 15:00", "15:00 - 16:00","17:00 - 18:00","19:00 - 20:00","20:00 - 21:00",
+            "21:00 - 22:00","22:00 - 23:00","23:00 - 24:00"};
+           
+          
         JComboBox<String> comboBox = new JComboBox<>(numbers);
         comboBox.setSelectedIndex(3);
         comboBox.setFont(new java.awt.Font("Serif", Font.PLAIN, 18));
-        //  comboBox.setPreferredSize(new Dimension(250,80));
-      //  comboBox.setPreferredSize(new Dimension(250,80));
-        comboBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JComboBox combo = (JComboBox)e.getSource();
-                time = (String)comboBox.getSelectedItem();
-                System.out.println(comboBox.getSelectedItem());
-            }
-        });
+       
          panel1.add(comboBox);
          JPanel panel3 = new JPanel();
          JCheckBox checkBox1 = new JCheckBox("Self driving ");  
          checkBox1.setBounds(100,100, 50,50);
          JCheckBox checkBox2 = new JCheckBox("Intelligent path finding");  
          checkBox2.setBounds(100,150, 50,50);  
+         JCheckBox checkBox3 = new JCheckBox("Random");
+         checkBox3.setBounds(150,125,50,50);
          checkBox1.setFont(myFont);
          checkBox2.setFont(myFont);
+         checkBox3.setFont(myFont);
          
          panel3.add(checkBox1);
          panel3.add(checkBox2);
+         panel3.add(checkBox3);
          
          container.add(panel1);
          container.add(panel3);
@@ -122,9 +124,19 @@ public class GUI {
                 }
                 m.selfDriving = checkBox1.isSelected();
                 m.intelligent = checkBox2.isSelected();
+                m.random = checkBox3.isSelected();
+                
+                time = (String)comboBox.getSelectedItem();
+                
+                DataReader reader;
+                try {
+                    reader = new DataReader("data.txt");
+                    m.initialize(reader,time);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 int rate = speed.getValue();
                 m.setRefreshRate(rate);
-                m.initialize();
                 m.run();
                 runGraphics(m);
             }
@@ -186,7 +198,7 @@ public class GUI {
             public void run() {
                 JFrame f = new JFrame();
                 f.setBounds(0, 0,model.WINDOW_WIDTH, model.WINDOW_HEIGHT);
-                f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.add(model);
                 f.setVisible(true);
             }

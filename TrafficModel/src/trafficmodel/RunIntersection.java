@@ -22,11 +22,11 @@ public class RunIntersection extends Model {
     
     public RunIntersection(){
         this.WINDOW_WIDTH = 1400;
-        intersection = new FourWayIntersection(5,40,40,0,0,650,50,100);
+        intersection = new FourWayIntersection(3,60,30,0,0,650,70,140);
         intersection.carWidth = 30;
         intersection.carHeight = 32;
         intersection.separation = 2*(32) + 30;
-        intersection.separationX = 10;
+        intersection.separationX = (70 - 30)/2;
              
        
     }
@@ -34,32 +34,34 @@ public class RunIntersection extends Model {
     @Override
     public void initialize(){
         int n = 20;
-        if (selfDriving){
-            schedule(0,6,n);
-            schedule(2,5,n);
-            schedule(1,4,n);
-            schedule(3,7,n);
-            
-            
+        
+        if (random){
+            schedule(0,n,5,6,7);
+            schedule(2,n,5,4);
+            schedule(1,n,4,7);
+            schedule(3,n,6,7);
         }
         else{
-           intersection.addCars(intersection.carWidth, intersection.carHeight, intersection.separationX , intersection.separationX , 12, new int[]{0,n},new int[]{2,n},new int[]{1,n},new int[]{3,n});
-           intersection.setLaneNextStep(0, 0);
-           intersection.setLaneNextStep(0, 6);
-           intersection.setLaneNextStep(2,2);
-           intersection.setLaneNextStep(2,5);
-           intersection.setLaneNextStep(1,1);
-           intersection.setLaneNextStep(1,4);
-           intersection.setLaneNextStep(3,3);
-           intersection.setLaneNextStep(3,7);
+           schedule(0,n,6);
+           schedule(2,n,5);
+           schedule(1,n,4);
+           schedule(3,n,7); 
         }
+        
+        
+       
+                
     }
     
-    private void schedule(int from,int to,int n){
+    private void schedule(int from,int n, int ... to){
         Lane fromLane = intersection.lanes.get(from);
-        Lane toLane = intersection.lanes.get(to);
-        Path p = new Path(new Lane[]{fromLane,toLane});
-        intersection.fromPath.put(fromLane, new Object[]{null,null,n,new Path[]{p}});
+        Path[] paths = new Path[to.length];
+        for(int i = 0;i<to.length;i++){
+           Lane toLane = intersection.lanes.get(to[i]);
+           Path p = new Path(new Lane[]{fromLane,toLane});
+           paths[i] = p;
+        }
+        intersection.fromPath.put(fromLane, new Object[]{null,null,n,paths});
     }
     @Override
     public void paint(Graphics g){

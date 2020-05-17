@@ -23,7 +23,7 @@ public class FourWayIntersection extends CitySection{
     public FourWayIntersection(double accel,double dist,double maxSpeed,int x,int y,int laneLength,int laneWidth,int jWidth){
         super(accel,dist,x,y);
         joint = new DirectJoint(new Point(x + laneLength,y + laneLength),jWidth,jWidth,maxSpeed);
-        Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + laneLength + jWidth));
+        Lane rightLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,100 + laneLength,new Point(x + laneLength + laneWidth,y + laneLength + jWidth));
         Lane leftLane = new Lane(Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y + 2*laneLength + jWidth));
         Lane rightUpLane = new Lane(3*Math.PI/2,maxSpeed,laneWidth,laneLength,new Point(x + laneLength + laneWidth,y));
         Lane leftUpLane = new Lane(Math.PI/2,maxSpeed,laneWidth,20 + laneLength,new Point(x + laneLength + laneWidth,y + laneLength));

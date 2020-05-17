@@ -131,8 +131,12 @@ public class Car extends Component{
        Lane current = steps.get(currentStep-1);
        Path p = nav.getPath(from, to);
        p.connections.add(0,current);
-       
        setPath(p);
+       System.out.println(from.name);
+       for(Lane l:p.connections){
+           System.out.println(l.name);
+       }
+       System.out.println();
        currentStep = 1;
         
     }
@@ -146,7 +150,7 @@ public class Car extends Component{
         
         //return (tX > 0 || tY > 0) && c.speed != 0;
         double angleDifference = c.direction - this.direction;
-        return (Math.cos(angleDifference) < 0 && c.speed != 0);
+        return (Math.cos(angleDifference) < 0 && c.speed != 0 && !c.equals(this));
         //return c.speed*Math.cos(angleDifference) <= 0 && c.speed != 0 && !c.equals(this);
     }
     

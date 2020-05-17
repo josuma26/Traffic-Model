@@ -22,7 +22,7 @@ public class Model extends Component{
     //every lane mustoverride update and paint
     protected double startTime;
     protected int x,y;
-    protected boolean selfDriving = true,intelligent = false,done = false;
+    protected boolean selfDriving,intelligent,done = false,random;
     
     private int rate = 1;
     
@@ -61,6 +61,10 @@ public class Model extends Component{
     }
     
     public void initialize(){
+        
+    }
+    
+    public void initialize(DataReader reader,String selection){
         
     }
     

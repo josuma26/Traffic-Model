@@ -8,6 +8,7 @@ package trafficmodel;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  *
@@ -87,19 +88,30 @@ public class MemorialDriveSimulation extends Model{
         complete.setConnections(memorialHingham.lanes.get(1), memorialHingham.lanes.get(2), extraLane, westernMemorial.lanes.get(1));
         
         nav = new Navigation(riverMemorial,riverBackstone,riverPutnam,westernMemorial,westernBackstone,westernPutnam,westernHew,callenderHew,memorialHingham,complete);
-        
     }
     
     
     @Override
-    public void initialize(){
-        int n = 100;
-        totalCars = n*5;
-        riverMemorial.scheduleCars(nav,0,n,carWidth,carHeight,separation,2,3,4,6,7,8,9);
-        riverMemorial.scheduleCars(nav, 1, n, carWidth, carHeight, separation, 2,3,4,6,7,8,9);
-        riverMemorial.scheduleCars(nav, 2, n, carWidth, carHeight, separation, 4,6,7,8);
-        riverMemorial.scheduleCars(nav,3,n,carWidth,carHeight,separation,6,7,8);
-        riverMemorial.scheduleCars(nav,9,n,carWidth,carHeight,separation,0,2,3,4,6,7,8);
+    public void initialize(DataReader reader,String selection){
+        HashMap<String,String> data = reader.getSectionData("MemorialDrive");
+        totalCars = Integer.parseInt(data.get(selection));
+        int n = totalCars/5;
+        
+        if (random){
+            riverMemorial.scheduleCars(nav,0,n,carWidth,carHeight,separation,2,3,4,6,7,8,9);
+            riverMemorial.scheduleCars(nav, 1, n, carWidth, carHeight, separation, 2,3,4,6,7,8,9);
+            riverMemorial.scheduleCars(nav, 2, n, carWidth, carHeight, separation, 4,6,7,8);
+            riverMemorial.scheduleCars(nav,3,n,carWidth,carHeight,separation,6,7,8);
+            riverMemorial.scheduleCars(nav,9,n,carWidth,carHeight,separation,0,2,3,4,6,7,8);
+        }
+        else{
+            riverMemorial.scheduleCars(nav, 0, n, carWidth, carHeight, separation, 9);
+            riverMemorial.scheduleCars(nav, 1, n, carWidth, carHeight, separation, 4);
+            riverMemorial.scheduleCars(nav, 2, n, carWidth, carHeight, separation, 7);
+            riverMemorial.scheduleCars(nav, 3, n, carWidth, carHeight, separation, 8);
+            riverMemorial.scheduleCars(nav, 9, n, carWidth, carHeight, separation, 0);
+            riverMemorial.scheduleCars(nav, 5, n, carWidth, carHeight, separation, 7);
+        }
         
     }
     @Override

@@ -189,7 +189,6 @@ public class Joint {
                             }
 
                             double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime,1);
-                            System.out.println(targetSpeed);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                         }
@@ -201,7 +200,7 @@ public class Joint {
                             if (yPrime < 0){
                                 yPrime = -2*yPrime;
                             }
-                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime,100);
+                            double targetSpeed = l2.maxSpeed + deltaV(l2.maxSpeed,a,c2.point.getY(),yPrime,1);
                             l2.targetSpeed = targetSpeed;
                             l2.decelerating = true;
                             
