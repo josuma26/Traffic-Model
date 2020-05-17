@@ -60,9 +60,7 @@ public class Model extends Component{
         
     }
     
-    public void initialize(){
-        
-    }
+    
     
     public void initialize(DataReader reader,String selection){
         

@@ -34,7 +34,6 @@ public class TrafficModel {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException {
-       
         GUI gui = new GUI();
         
         //runGraphics(new SimpleTraffic());

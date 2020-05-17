@@ -57,7 +57,7 @@ public class FourIntersections extends Model{
     }
     
     @Override
-    public void initialize(){
+    public void initialize(DataReader reader,String selection){
         int n = 20;
         totalCars = 8*n;
         if (selfDriving){
@@ -106,11 +106,7 @@ public class FourIntersections extends Model{
         intersection4.updateAuto(interval,nav,intelligent); 
         
         done = left(nav) == totalCars;
-        Lane l = intersection3.lanes.get(1);
-        if (l.cars.size() > 0){
-            Car c = l.cars.get(0);
-            //System.out.printf("A: %.1f S: %.1f t:%.1f\n",c.acceleration,c.speed,l.targetSpeed);
-        }
+        
     }
     
     @Override

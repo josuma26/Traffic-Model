@@ -32,11 +32,11 @@ public class RunIntersection extends Model {
     }
     
     @Override
-    public void initialize(){
-        int n = 20;
+    public void initialize(DataReader reader,String selection){
+        int n = 50;
         
         if (random){
-            schedule(0,n,5,6,7);
+            schedule(0,n,5,6);
             schedule(2,n,5,4);
             schedule(1,n,4,7);
             schedule(3,n,6,7);
